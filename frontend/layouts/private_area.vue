@@ -2,6 +2,7 @@
 div
 	Navbar
 	.wrapper
+		Sidebar
 		.container
 			main
 				nuxt
@@ -10,11 +11,19 @@ div
 
 <script>
 import Navbar from '~/components/Navbar'
+import Sidebar from '~/components/Sidebar'
 export default {
 	components: {
-		Navbar
+		Navbar,
+		Sidebar
 	}
 }
 </script>
 
-<style></style>
+<style lang="scss">
+.wrapper {
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+</style>

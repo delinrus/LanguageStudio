@@ -30,15 +30,20 @@ export default {
   /*
   ** Global CSS
   */
+  bootstrapVue: {
+    bootstrapCSS: false,
+    bootstrapVueCSS: false
+  },
   css: [
-    'element-ui/lib/theme-chalk/index.css'
+    '@/assets/scss/main.scss'
   ],
 
   /*
   ** Plugins to load before mounting the App
   */
   plugins: [
-    '@/plugins/element-ui'
+    '@/plugins/vuelidate.plugin.js',
+    '@/plugins/fio.filter.plugin.js'
   ],
 
   /*
@@ -47,6 +52,10 @@ export default {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
+    'bootstrap-vue/nuxt',
+    '@nuxtjs/pwa',
+    '@nuxtjs/dotenv',
+    'nuxt-material-design-icons'
   ],
   /*
   ** Axios module configuration
@@ -68,8 +77,8 @@ export default {
   ** Build configuration
   */
   build: {
-    transpile: [/^element-ui/],
-    
+   // transpile: [/^element-ui/],
+
     /*
     ** You can extend webpack config here
     */

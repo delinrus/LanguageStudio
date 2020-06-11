@@ -10,9 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class PingController {
 
-    @RequestMapping(path = "/ping")
-    public @ResponseBody String ping() {
-        log.info("GET called on /ping resource");
-        return "pong";
-    }
+	@RequestMapping(path = "/ping")
+	public @ResponseBody
+	String ping() {
+		log.info("GET called on /ping resource");
+		return "pong";
+	}
 }

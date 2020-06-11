@@ -1,0 +1,15 @@
+//Sass library ex //DONT WRITE FILE EXTENSION IF IT HAVE SCSS
+//@import '../../node_modules/spinners/stylesheets/spinners';
+
+//CSS lib ex (WRITE FILE EXTENSION .css
+//@import '../../node_modules/flickity/dist/flickity.css';
+
+//@import "../../node_modules/normalize.css/normalize.css";
+
+//import Bootstrap from 'bootstrap/dist/css/bootstrap.min.css
+//import 'bootstrap/dist/css/bootstrap.min.css'
+@import '../../../node_modules/bootstrap/scss/functions';
+@import './bootstrap_vars';
+
+@import '../../../node_modules/bootstrap/scss/bootstrap';
+@import '../../../node_modules/bootstrap-vue/src/index.scss';

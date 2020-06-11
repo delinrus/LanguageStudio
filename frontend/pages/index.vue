@@ -1,58 +1,33 @@
-<template>
-  <section class="container">
-    <div>
-      <h1 class="title">
-        frontend
-      </h1>
-      <h2 class="subtitle">
-        Demo Spring Boot + Nuxt
-      </h2>
-      <div class="links">
-        <el-button type="primary" plain @click.native.prevent="$router.push({ path: '/users' })">User management</el-button>
-        <el-button type="primary" plain @click.native.prevent="ping">Ping</el-button>
-      </div>
-    </div>
-  </section>
+<template lang="pug">
+  .row
+    .col-md-1.col-sm-12.border
+      | One of three columns
+    .col-md-10.col-sm-12.border
+      button.btn.btn-primary( @click.prevent='ping') Ping
+    .col-md-1.col-sm-12.border.d-none.d-md-block
+      | Third of three columns
+
 </template>
 
 <script>
 export default {
+  components: {},
   methods: {
     ping() {
-      this.$axios.$get('/api/ping')
-        .then(result => {
-          this.$alert('Response from the server: ' + result, 'Ping')
+      //TODO! REMOVE THIS, ONLY EXAMPLE OF REQUREST TO BACKEND
+      const showMessage = (result, variant) => {
+        this.$bvToast.toast(`Response from server: ${result}`, {
+          title: 'Ping result',
+          variant: variant,
+          autoHideDelay: 2000,
+          appendToast: false,
         })
-    }
-  }
+      }
+      this.$axios.$get('/api/ping').then(
+        (result) => showMessage(result, 'success'),
+        (error) => showMessage(error, 'danger')
+      )
+    },
+  },
 }
 </script>
-
-<style>
-.container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-</style>

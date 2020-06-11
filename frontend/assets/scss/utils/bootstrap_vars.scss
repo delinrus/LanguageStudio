@@ -1,0 +1,39 @@
+// Font
+$mainFont: 'Montserrat', Helvetica, Arial, sans-serif;
+//$mainFont: "Helvetica-Base", Helvetica, Arial, sans-serif;
+
+// Size
+$mainFontColor: #101010;
+$mainFontSize: 18px;
+$mainFontWeight: 400;
+$mainLineHeight: 1.4;
+
+$desktopWidth: 1280px;
+$smDesktopWidth: 1024px;
+$tableWidth: 768px;
+$smTableWidth: 640px;
+$phoneWidth: 480px;
+$smPhoneWidth: 320px;
+
+/*
+ All colors taken from:
+ https://github.com/vedees/uimini
+*/
+$theme-colors: (
+	// Main color
+		'default-color': #ffffff,
+	'primary': #ff662b,
+	'success-color': #26de81,
+	//'danger-color': #fc5c65,
+		//'warning-color': #fed330,
+		'light-color': #999999,
+	//'purple-color': #8854d0,
+		// Neutral Color //'neutral-primary': #303133,
+		'neutral-regular': #463e3b,
+	'neutral-secondary': #e9ded2,
+	//'neutral-placeholder': #c0c4cc,
+		// Border Color //'border-base': #dcdfe6,
+		//'border-light': #e4e7ed,
+		//'border-lighter': #ebeef5,
+		//'border-lightex': #f2f6fc
+);

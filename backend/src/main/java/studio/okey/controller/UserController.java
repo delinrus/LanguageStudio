@@ -14,29 +14,32 @@ import java.util.List;
 @Slf4j
 public class UserController {
 
-    @Autowired
-    private UserRepository userRepository;
+	@Autowired
+	private UserRepository userRepository;
 
-    @GetMapping(path = "/user")
-    public @ResponseBody List<User> getUsers() {
-        return userRepository.findAll();
-    }
+	@GetMapping(path = "/user")
+	public @ResponseBody
+	List<User> getUsers() {
+		return userRepository.findAll();
+	}
 
-    @RequestMapping(path = "/user", method = RequestMethod.POST)
-    @ResponseStatus(HttpStatus.CREATED)
-    public @ResponseBody long addNewUser (@RequestParam String firstName, @RequestParam String lastName) {
-        final User user = new User(firstName, lastName);
-        userRepository.save(user);
+	@RequestMapping(path = "/user", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.CREATED)
+	public @ResponseBody
+	long addNewUser(@RequestParam String firstName, @RequestParam String lastName) {
+		final User user = new User(firstName, lastName);
+		userRepository.save(user);
 
-        log.info("{} successfully saved into DB", user.toString());
+		log.info("{} successfully saved into DB", user.toString());
 
-        return user.getId();
-    }
+		return user.getId();
+	}
 
-    @GetMapping(path = "/user/{id}")
-    public @ResponseBody User getUserById(@PathVariable("id") long id) {
-        log.info("Reading user with id {} from database.", id);
-        return userRepository.findById(id).get();
-    }
+	@GetMapping(path = "/user/{id}")
+	public @ResponseBody
+	User getUserById(@PathVariable("id") long id) {
+		log.info("Reading user with id {} from database.", id);
+		return userRepository.findById(id).get();
+	}
 
 }

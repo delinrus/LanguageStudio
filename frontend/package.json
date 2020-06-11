@@ -12,11 +12,22 @@
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.5.4",
+    "@nuxtjs/dotenv": "^1.4.1",
+    "@nuxtjs/pwa": "^3.0.0-beta.20",
+    "bootstrap-vue": "^2.15.0",
     "cross-env": "^5.2.0",
     "element-ui": "^2.9.1",
-    "nuxt": "^2.12.2"
+    "nuxt": "^2.12.2",
+    "nuxt-material-design-icons": "^1.0.4",
+    "vuelidate": "^0.7.5"
   },
   "devDependencies": {
-    "nodemon": "^2.0.4"
+    "node-sass": "^4.14.1",
+    "nodemon": "^2.0.4",
+    "prettier": "2.0.5",
+    "pug": "^3.0.0",
+    "pug-plain-loader": "^1.0.0",
+    "raw-loader": "^4.0.1",
+    "sass-loader": "^8.0.2"
   }
 }
