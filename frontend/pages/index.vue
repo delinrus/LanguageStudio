@@ -23,7 +23,7 @@ export default {
           appendToast: false,
         })
       }
-      this.$axios.$get('/api/ping').then(
+      this.$axios.$get('/api/student').then(
         (result) => showMessage(result, 'success'),
         (error) => showMessage(error, 'danger')
       )
