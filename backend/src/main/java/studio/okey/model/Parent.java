@@ -1,22 +1,23 @@
 package studio.okey.model;
 
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
 import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
 
 @Entity
+@ToString
+@NoArgsConstructor
 @Table(name = "parent")
 public class Parent {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long parent_id;
+    private long parentId;
     private String surname;
     private String name;
     private String patronymic;
     private String phone;
-
-    protected Parent() {
-    }
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name="parent_student",
@@ -26,16 +27,5 @@ public class Parent {
 
     public Set<Student> getStudents() {
         return students;
-    }
-
-    @Override
-    public String toString() {
-        return "Parent{" +
-                "parent_id=" + parent_id +
-                ", surname='" + surname + '\'' +
-                ", name='" + name + '\'' +
-                ", patronymic='" + patronymic + '\'' +
-                ", phone='" + phone +
-                '}';
     }
 }

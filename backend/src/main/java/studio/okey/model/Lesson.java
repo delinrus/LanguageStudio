@@ -8,12 +8,12 @@ import java.util.Date;
 public class Lesson {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long lesson_id;
-    private Date lesson_date;
+    private long lessonId;
+    private Date lessonDate;
     private String theme;
     private String homework;
 
-    @ManyToOne (optional=false, cascade=CascadeType.ALL)
-    @JoinColumn(name="group_id")
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @JoinColumn(name = "group_name")
     private LearningGroup learningGroup;
 }
