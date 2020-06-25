@@ -8,7 +8,7 @@ import java.util.Date;
 public class Lesson {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long lessonId;
+    private long id;
     private Date lessonDate;
     private String theme;
     private String homework;

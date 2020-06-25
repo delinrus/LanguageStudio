@@ -13,7 +13,7 @@ import java.util.Set;
 public class Parent {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long parentId;
+    private long id;
     private String surname;
     private String name;
     private String patronymic;

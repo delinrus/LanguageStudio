@@ -15,7 +15,7 @@ import java.util.Set;
 public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long studentId;
+    private Long id;
     private String surname;
     private String name;
     private String patronymic;

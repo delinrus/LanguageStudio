@@ -12,8 +12,7 @@ public class StudentUtil {
     }
 
     private static StudentTo crateTo(Student s) {
-        return new StudentTo(s.getStudentId(), s.getSurname(), s.getName(), s.getPatronymic(),
+        return new StudentTo(s.getId(), s.getSurname(), s.getName(), s.getPatronymic(),
                 s.getLearningGroup() == null ? null : GroupUtil.createTo(s.getLearningGroup()));
     }
-
 }
