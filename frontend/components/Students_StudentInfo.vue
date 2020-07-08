@@ -1,6 +1,7 @@
 <template lang="pug">
-b-modal(:id = 'id' title='Карточка ученика', @show='resetModal', @hidden='resetModal', @ok='handleSave' size="lg")
-	form(ref='form')
+b-modal(:id = 'id' title='Карточка ученика', @show='onShowForm', @hidden='onHideForm', @ok='handleSave' size="lg")
+	Loader(v-if="isLoading")
+	form(v-else ref='form')
 		.row
 			b-form-group.col-md-4.col-sm-12(label='Фамилия:', invalid-feedback='Введите фамилию')
 				b-form-input(v-model='$v.student.family.$model' type='text' :state="validateState($v.student.family)" v-bind:readonly='isReadonly')
@@ -13,9 +14,9 @@ b-modal(:id = 'id' title='Карточка ученика', @show='resetModal', 
 				b-form-input(v-model='$v.student.address.$model'  type='text'  :state='$v.student.address.$dirty? true:null'  v-bind:readonly='isReadonly')
 		.row(v-if='student.group!==null')
 			b-form-group.col-6(label='Группа:', invalid-feedback='Укажите группу')
-				b-form-select(v-model='$v.student.group.$model' :options='groupList' v-bind:disabled='isReadonly')
+				b-form-select(v-model='$v.student.group.$model' :options='groupNames' v-bind:disabled='isReadonly')
 		.row
-			b-form-group.col-6(label='Телефон:' invalid-feedback='Введите телефон')
+			b-form-group.col-6(label='Телефон для связи:' invalid-feedback='Введите телефон')
 				b-input-group
 					b-input-group-prepend(is-text)
 						i.material-icons.align-middle phone
@@ -44,7 +45,7 @@ b-modal(:id = 'id' title='Карточка ученика', @show='resetModal', 
 	template(v-slot:modal-footer='{ edit, cancel, ok }')
 		// Emulate built in modal footer ok and cancel button actions
 		// Button with custom close trigger value
-		b-button.mr-auto(v-if="isReadonly" variant='outline-primary', @click="isReadonly = false; changedToEdit = true") Изменить
+		b-button.mr-auto(v-if="isReadonly && !isLoading" variant='outline-primary', @click="isReadonly = false; changedToEdit = true") Изменить
 		b-button(v-if="changedToEdit" variant='secondary', @click='cancel()') Отменить
 		b-button(v-if="changedToEdit" variant='primary', @click='ok()') Сохранить
 		b-button(v-else variant='primary', @click='cancel()') Закрыть
@@ -52,38 +53,36 @@ b-modal(:id = 'id' title='Карточка ученика', @show='resetModal', 
 </template>
 
 <script>
+import Loader from '~/components/Loader'
+import Student from '~/js/student_class'
 import { required, minLength, alpha } from 'vuelidate/lib/validators'
 import phoneValidator from '@/plugins/phone.validator'
 export default {
+	model: {
+		prop: ['id', 'isReadonlyMode', 'student_id'],
+		event: 'onChange',
+	},
 	props: {
 		id: {
 			type: String,
-			required: true
+			required: true,
 		},
-		groupList: {
-			type: Array,
-			required: true
-		},
-		isReadonlyMode: {
-			type: Boolean,
-			default: false
-		},
-		student_prop: {
+		student_id: {
 			required: true,
 			default: null,
-			validator: prop => typeof prop === 'object' || prop === null
-		}
+		},
 	},
+	components: { Loader },
 	validations: {
 		student: {
 			name: {
 				required,
-				minLength: minLength(2)
+				minLength: minLength(2),
 			},
 			patronymic: {},
 			family: {
 				required,
-				minLength: minLength(2)
+				minLength: minLength(2),
 			},
 			address: {},
 			group: {},
@@ -92,31 +91,29 @@ export default {
 				$each: {
 					name: {
 						required,
-						minLength: minLength(2)
+						minLength: minLength(2),
 					},
 					patronymic: {},
 					family: {
 						required,
-						minLength: minLength(2)
+						minLength: minLength(2),
 					},
-					phone: { phoneValidator }
-				}
-			}
-		}
+					phone: { phoneValidator },
+				},
+			},
+		},
+	},
+	computed: {
+		groupNames() {
+			return this.$store.getters['groups/groups'].map((el) => el.name)
+		},
 	},
 	data() {
 		return {
+			isLoading: true,
 			isReadonly: false,
 			changedToEdit: false,
-			student: {
-				name: '',
-				family: '',
-				patronymic: '',
-				group: null,
-				address: '',
-				phone: '',
-				parents: []
-			}
+			student: null, //create in onShow
 		}
 	},
 	methods: {
@@ -132,29 +129,47 @@ export default {
 			}
 			return is_valid
 		},
-		resetModal() {
+		getStudent() {
+			return this.$store.getters['students/studentById'](this.student_id)
+		},
+		async onShowForm() {
 			this.$v.$reset()
-			if (this.student_prop) {
+			this.isLoading = true
+
+			if (this.student_id) {
 				this.changedToEdit = false
-				this.student = this.student_prop
+				//cache
+				if (this.groupNames.length == 0) {
+					await this.$store.dispatch('groups/fetchAll')
+				}
+
+				//cache
+				if (
+					!this.$store.getters['students/studentById'](this.student_id).detailed
+				) {
+					await this.$store.dispatch('students/fetchById', this.student_id)
+				}
+				//this.student = {
+				//	...this.$store.getters['students/studentById'](this.student_id),
+				//}
+				this.student = this.getStudent().clone()
+
+				this.student.group = this.student.group ? this.student.group.name : ''
 				if (!this.student.parents) {
 					this.student.parents = []
 				}
 			} else {
 				this.changedToEdit = true
-				this.student = {
-					name: '',
-					family: '',
-					patronymic: '',
-					group: null,
-					address: '',
-					phone: '',
-					parents: []
-				}
+				this.student = new Student()
 			}
-			this.isReadonly = this.isReadonlyMode
+			this.isReadonly = this.student_id !== null //if student exist then readonly
+			this.isLoading = false
+			//this.$loadingFinish()
 		},
-		handleSave(bvModalEvt) {
+		onHideForm() {
+			this.$v.$reset()
+		},
+		async handleSave(bvModalEvt) {
 			// Prevent modal from closing
 			bvModalEvt.preventDefault()
 			// Trigger submit handler
@@ -163,6 +178,15 @@ export default {
 				return
 			}
 
+			try {
+				if (this.student_id) {
+					await this.$store.dispatch('students/updateStudent', this.student)
+				} else {
+					await this.$store.dispatch('students/createStudent', this.student)
+				}
+				this.$store.getters['students/studentById'](this.student_id)
+				this.$emit('onChange')
+			} catch (error) {}
 			//TODO! save this.student to DATABASE
 			this.$nextTick(() => {
 				this.$bvModal.hide(this.id)
@@ -173,12 +197,12 @@ export default {
 				name: '',
 				patronymic: '',
 				family: '',
-				phone: ''
+				phone: '',
 			})
 		},
 		deleteParent(n) {
 			this.student.parents.splice(n, 1)
-		}
-	}
+		},
+	},
 }
 </script>

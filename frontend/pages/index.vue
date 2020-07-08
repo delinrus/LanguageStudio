@@ -11,23 +11,15 @@
 
 <script>
 export default {
-  components: {},
-  methods: {
-    ping() {
-      //TODO! REMOVE THIS, ONLY EXAMPLE OF REQUREST TO BACKEND
-      const showMessage = (result, variant) => {
-        this.$bvToast.toast(`Response from server: ${result}`, {
-          title: 'Ping result',
-          variant: variant,
-          autoHideDelay: 2000,
-          appendToast: false,
-        })
-      }
-      this.$axios.$get('/api/student').then(
-        (result) => showMessage(result, 'success'),
-        (error) => showMessage(error, 'danger')
-      )
-    },
-  },
+	components: {},
+	methods: {
+		ping() {
+			//TODO! REMOVE THIS, ONLY EXAMPLE OF REQUREST TO BACKEND
+			this.$axios.$get('/api/student').then(
+				(result) => this.$message(result),
+				(error) => this.$error(error)
+			)
+		},
+	},
 }
 </script>

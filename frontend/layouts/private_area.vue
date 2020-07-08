@@ -15,8 +15,24 @@ import Sidebar from '~/components/Sidebar'
 export default {
 	components: {
 		Navbar,
-		Sidebar
-	}
+		Sidebar,
+	},
+	computed: {
+		error() {
+			return this.$store.getters['error/error']
+		},
+		notify() {
+			return this.$store.getters['error/notify']
+		},
+	},
+	watch: {
+		error(value) {
+			if (value) this.$error(value.message)
+		},
+		notify(value) {
+			if (value) this.$message(value.message)
+		},
+	},
 }
 </script>
 

@@ -1,13 +1,13 @@
 <template lang="pug">
 .row
 	.col(v-if='!showStudentAdder')
-		button.ml-auto.btn.btn-outline-primary(@click='showStudentAdder=true') Добавить ученика
+		button.ml-auto.btn.btn-outline-primary(@click='showAdder()' v-if="group_id") Добавить ученика
 	//show form for add student
 	.col(v-else)
 		.row
 			.col-md.col-sm-12.px-sm-0.px-md-3
 				.form-group
-					b-form-select(v-model='$v.addedStudent.$model' :options='studentNames' :state='validateState($v.addedStudent)')
+					b-form-select(v-model='$v.addedStudent.$model' :options='studentNames' :state='validateState($v.addedStudent)' :disabled='isLoadingStudents')
 			.col-md.col-sm-12
 				.row
 					button.col-5.btn.btn-outline-primary(@click='handleCancelAddStudentToGroup()') Отмена
@@ -21,34 +21,34 @@ import { required } from 'vuelidate/lib/validators'
 
 export default {
 	model: {
-		props: ['group', 'allStudents']
+		props: ['group_id'],
 	},
 	props: {
-		group: {
-			type: Object,
-			required: true
+		group_id: {
+			required: true,
 		},
-		allStudents: {
-			type: Array,
-			required: true
-		}
 	},
 	validations: {
-		addedStudent: { required }
+		addedStudent: { required },
 	},
 	computed: {
-		studentNames: function() {
+		studentNames: function () {
 			//TODO MAKE HERE ID OF GROUP, NOT NAME
 			return this.allStudents
-				.filter(el => el.group !== this.group.name)
-				.map(el => filterFio(el))
-		}
+				.filter((el) => !el.group || el.group.name !== this.group_id)
+				.map((el) => filterFio(el))
+		},
 	},
 	data() {
 		return {
+			allStudents: [],
+			isLoadingStudents: true,
 			addedStudent: '', //student name for add
-			showStudentAdder: false //add student form
+			showStudentAdder: false, //add student form
 		}
+	},
+	mounted() {
+		this.showStudentAdder = false
 	},
 	methods: {
 		validateState(p) {
@@ -62,22 +62,42 @@ export default {
 			}
 			return is_valid
 		},
-		handleAddStudentToGroup(name) {
+		async handleAddStudentToGroup(name) {
 			if (!this.checkFormValidity()) {
 				return
 			}
-			//TODO ADD Student to group
+			const student = this.allStudents.find(
+				(el) => filterFio(el) === this.addedStudent
+			)
+			await this.$store.dispatch('students/changeGroup', {
+				student,
+				group_id: this.group_id,
+			})
+			//await this.$store.dispatch('groups/fetchByName', this.group_id)
 			this.resetForm()
 		},
+
+		async showAdder() {
+			this.showStudentAdder = true
+
+			if (this.$store.getters['students/students'].length === 0) {
+				this.isLoadingStudents = true
+				await this.$store.dispatch('students/fetchAll')
+			}
+			this.allStudents = this.$store.getters['students/students']
+			this.isLoadingStudents = false
+		},
 		handleCancelAddStudentToGroup() {
+			this.showStudentAdder = false
 			this.resetForm()
 		},
 		resetForm() {
-			this.$v.$reset()
 			this.addedStudent = ''
-			this.showStudentAdder = false
-		}
-	}
+			this.$nextTick(() => {
+				this.$v.$reset()
+			})
+		},
+	},
 }
 </script>
 <style scoped lang="scss"></style>

@@ -1,88 +1,85 @@
 import pkg from './package'
 
 export default {
-  mode: 'spa',
+	mode: 'spa',
 
-  generate: {
-    dir: 'target/dist'
-  },
+	generate: {
+		dir: 'target/dist',
+	},
 
-  /*
-  ** Headers of the page
-  */
-  head: {
-    title: pkg.name,
-    meta: [
-      { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: pkg.description }
-    ],
-    link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-    ]
-  },
+	/*
+	 ** Headers of the page
+	 */
+	head: {
+		title: pkg.name,
+		meta: [
+			{ charset: 'utf-8' },
+			{ name: 'viewport', content: 'width=device-width, initial-scale=1' },
+			{ hid: 'description', name: 'description', content: pkg.description },
+		],
+		link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+	},
 
-  /*
-  ** Customize the progress-bar color
-  */
-  loading: { color: '#fff' },
+	/*
+	 ** Customize the progress-bar color
+	 */
+	loading: { color: '#ff662b' },
 
-  /*
-  ** Global CSS
-  */
-  bootstrapVue: {
-    bootstrapCSS: false,
-    bootstrapVueCSS: false
-  },
-  css: [
-    '@/assets/scss/main.scss'
-  ],
+	/*
+	 ** Global CSS
+	 */
+	bootstrapVue: {
+		bootstrapCSS: false,
+		bootstrapVueCSS: false,
+	},
+	css: ['@/assets/scss/main.scss'],
 
-  /*
-  ** Plugins to load before mounting the App
-  */
-  plugins: [
-    '@/plugins/vuelidate.plugin.js',
-    '@/plugins/fio.filter.plugin.js'
-  ],
+	/*
+	 ** Plugins to load before mounting the App
+	 */
+	plugins: [
+		'@/plugins/vuelidate.plugin.js',
+		'@/plugins/fio.filter.plugin.js',
+		'@/plugins/messages.plugin.js',
+		'@/plugins/loading.plugin.js',
+	],
 
-  /*
-  ** Nuxt.js modules
-  */
-  modules: [
-    // Doc: https://axios.nuxtjs.org/usage
-    '@nuxtjs/axios',
-    'bootstrap-vue/nuxt',
-    '@nuxtjs/pwa',
-    '@nuxtjs/dotenv',
-    'nuxt-material-design-icons'
-  ],
-  /*
-  ** Axios module configuration
-  */
-  axios: {
-    // See https://github.com/nuxt-community/axios-module#options
-    proxy: true,
-    debug: true
-  },
+	/*
+	 ** Nuxt.js modules
+	 */
+	modules: [
+		// Doc: https://axios.nuxtjs.org/usage
+		'@nuxtjs/axios',
+		'bootstrap-vue/nuxt',
+		'@nuxtjs/pwa',
+		'@nuxtjs/dotenv',
+		'nuxt-material-design-icons',
+	],
+	/*
+	 ** Axios module configuration
+	 */
+	axios: {
+		// See https://github.com/nuxt-community/axios-module#options
+		proxy: true,
+		debug: true,
+	},
 
-  proxy: {
-    // See https://axios.nuxtjs.org/options, https://github.com/nuxt-community/proxy-module
-    '/api': {
-      target: 'http://localhost:8080'
-    }
-  },
+	proxy: {
+		// See https://axios.nuxtjs.org/options, https://github.com/nuxt-community/proxy-module
+		'/api': {
+			target: 'http://localhost:8080',
+		},
+	},
 
-  /*
-  ** Build configuration
-  */
-  build: {
-   // transpile: [/^element-ui/],
+	/*
+	 ** Build configuration
+	 */
+	build: {
+		// transpile: [/^element-ui/],
 
-    /*
-    ** You can extend webpack config here
-    */
-    extend(config, ctx) {
-    }
-  }
+		/*
+		 ** You can extend webpack config here
+		 */
+		extend(config, ctx) {},
+	},
 }

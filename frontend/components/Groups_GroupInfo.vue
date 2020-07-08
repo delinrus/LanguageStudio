@@ -1,19 +1,22 @@
 <template lang="pug">
-b-modal(:id = 'id' title='Карточка группы', @show='resetModal', @hidden='resetModal', @ok='handleSave' size="lg")
-	form(ref='form')
+b-modal(:id = 'id' title='Карточка группы', @show='onShowForm', @hidden='onHideForm', @ok='handleSave' size="lg")
+	Loader(v-if="isLoading")
+	form(v-else ref='form')
 		.row
 			b-form-group.col(label='Название группы:', invalid-feedback='Введите название гпуппы')
 				b-form-input(v-if='!$v.group.is_individual.$model' v-model='$v.group.name.$model' type='text' :state="validateState($v.group.name)" v-bind:readonly='isReadonly')
-				b-form-select(v-else v-model='$v.group.name.$model' :options='studentNames' v-bind:disabled='isReadonly' :state='validateState($v.group.name)')
+				b-form-select(v-else v-model='$v.group.name.$model' :options='studentNames' v-bind:disabled='group_id!==null' :state='validateState($v.group.name)')
 		.row
 			b-form-group.col-12(label='Тип группы:' )
-				b-form-radio-group(v-model='$v.group.is_individual.$model' v-bind:disabled='isReadonly')
+				b-form-radio-group(v-model='$v.group.is_individual.$model' v-bind:disabled='group_id!==null')
 					b-form-radio(:value='false') Группа
 					b-form-radio(:value='true') Индивидуально
 	template(v-slot:modal-footer='{ edit, cancel, ok }')
 		// Emulate built in modal footer ok and cancel button actions
 		// Button with custom close trigger value
 		b-button.mr-auto(v-if="isReadonly" variant='outline-primary', @click="isReadonly = false; changedToEdit = true") Изменить
+		b-button.mr-auto(v-if="group_id!==null && !isReadonly && !changedToDelete" variant='danger', @click="changedToDelete = true") Удалить
+		b-button.mr-auto.shaked(v-if="group_id!==null && !isReadonly && changedToDelete" variant='danger' @click="deleteGroup()") Удалить?
 		b-button(v-if="changedToEdit" variant='secondary', @click='cancel()') Отменить
 		b-button(v-if="changedToEdit" variant='primary', @click='ok()') Сохранить
 		b-button(v-else variant='primary', @click='cancel()') Закрыть
@@ -23,50 +26,48 @@ b-modal(:id = 'id' title='Карточка группы', @show='resetModal', @h
 <script>
 import { required, minLength, alpha } from 'vuelidate/lib/validators'
 import filterFio from '@/plugins/fio.filter'
+import Loader from '~/components/Loader'
+import Group from '~/js/group_class'
 export default {
+	model: {
+		props: ['id', 'group_id'],
+	},
 	props: {
 		id: {
 			type: String,
-			required: true
-		},
-		isReadonlyMode: {
-			type: Boolean,
-			default: false
-		},
-		group_prop: {
 			required: true,
-			default: null,
-			validator: prop => typeof prop === 'object' || prop === null
 		},
-		allStudents: {
-			type: Array,
-			required: true
-		}
+		group_id: {
+			required: true,
+		},
+	},
+	components: {
+		Loader,
 	},
 	validations: {
 		group: {
 			name: {
 				required,
-				minLength: minLength(2)
+				minLength: minLength(2),
 			},
-			is_individual: {}
-		}
+			is_individual: {},
+		},
 	},
 	computed: {
-		studentNames: function() {
+		studentNames: function () {
 			//convert allStudents to names
-			return this.allStudents.map(el => filterFio(el))
-		}
+			const a = this.allStudents.map((el) => filterFio(el, 'long'))
+			return a
+		},
 	},
 	data() {
 		return {
+			changedToDelete: false,
+			isLoading: true,
 			isReadonly: false,
 			changedToEdit: false,
-			group: {
-				name: '',
-				students: [],
-				is_individual: false
-			}
+			group: null, //create onShow
+			allStudents: [],
 		}
 	},
 	methods: {
@@ -82,22 +83,39 @@ export default {
 			}
 			return is_valid
 		},
-		resetModal() {
-			this.$v.$reset()
-			if (this.group_prop) {
-				this.changedToEdit = false
-				this.group = this.group_prop
-			} else {
-				this.changedToEdit = true
-				this.group = {
-					name: '',
-					students: [],
-					is_individual: false
-				}
-			}
-			this.isReadonly = this.isReadonlyMode
+		getGroup() {
+			return this.$store.getters['groups/groupByName'](this.group_id)
 		},
-		handleSave(bvModalEvt) {
+		getAllStudents() {
+			return this.$store.getters['students/students']
+		},
+		async onShowForm() {
+			this.isLoading = true
+			this.changedToDelete = false
+			this.$v.$reset()
+			this.isReadonly = this.group_id !== null //if group exist->readonly
+			if (this.getAllStudents().length == 0) {
+				await this.$store.dispatch('students/fetchAll')
+			}
+			this.allStudents = this.getAllStudents()
+
+			if (this.group_id === null) {
+				this.group = new Group()
+			} else {
+				//cache
+				if (!this.getGroup().detailed) {
+					await this.$store.dispatch('groups/fetchByName', this.group_id)
+				}
+				this.group = this.getGroup().clone()
+			}
+
+			this.isLoading = false
+		},
+		async onHideForm() {
+			this.changedToDelete = false
+			this.$v.$reset()
+		},
+		async handleSave(bvModalEvt) {
 			// Prevent modal from closing
 			bvModalEvt.preventDefault()
 			// Trigger submit handler
@@ -105,21 +123,33 @@ export default {
 			if (!this.checkFormValidity()) {
 				return
 			}
-
-			//TODO! save this.group to DATABASE
 			// if now individual grup->set student as member of group
-			if (this.group.is_individual) {
-				//TODO! change group of student
-				const student = this.allStudents.find(
-					el => this.studentToFio(el) === this.group.name
-				)
-				this.group.students = [student]
+			//new group
+
+			if (this.group_id === null) {
+				await this.$store.dispatch('groups/createGroup', this.group)
+			} else {
+				await this.$store.dispatch('groups/updateGroup', {
+					name: this.group_id,
+					group: this.group,
+				})
 			}
-			debugger
 			this.$nextTick(() => {
 				this.$bvModal.hide(this.id)
 			})
-		}
-	}
+		},
+		async deleteGroup() {
+			this.isLoading = true
+			await this.$store.dispatch('groups/deleteGroupByName', this.group_id)
+			this.$nextTick(() => {
+				this.$bvModal.hide(this.id)
+			})
+		},
+	},
 }
 </script>
+<style scoped>
+.shaked {
+	animation: shake 0.3s;
+}
+</style>
