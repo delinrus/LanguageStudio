@@ -27,4 +27,8 @@ export default class Group {
 	clone() {
 		return new Group(this, this.detailed)
 	}
+
+	isEmpty() {
+		return this.name === ''
+	}
 }

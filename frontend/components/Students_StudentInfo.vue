@@ -154,7 +154,7 @@ export default {
 				//}
 				this.student = this.getStudent().clone()
 
-				this.student.group = this.student.group ? this.student.group.name : ''
+				this.student.group = this.student.group.name
 				if (!this.student.parents) {
 					this.student.parents = []
 				}
@@ -187,7 +187,6 @@ export default {
 				this.$store.getters['students/studentById'](this.student_id)
 				this.$emit('onChange')
 			} catch (error) {}
-			//TODO! save this.student to DATABASE
 			this.$nextTick(() => {
 				this.$bvModal.hide(this.id)
 			})

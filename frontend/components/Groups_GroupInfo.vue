@@ -5,18 +5,18 @@ b-modal(:id = 'id' title='Карточка группы', @show='onShowForm', @h
 		.row
 			b-form-group.col(label='Название группы:', invalid-feedback='Введите название гпуппы')
 				b-form-input(v-if='!$v.group.is_individual.$model' v-model='$v.group.name.$model' type='text' :state="validateState($v.group.name)" v-bind:readonly='isReadonly')
-				b-form-select(v-else v-model='$v.group.name.$model' :options='studentNames' v-bind:disabled='group_id!==null' :state='validateState($v.group.name)')
+				b-form-select(v-else v-model='$v.group.name.$model' :options='studentNames' v-bind:disabled='isExistedGroup' :state='validateState($v.group.name)')
 		.row
 			b-form-group.col-12(label='Тип группы:' )
-				b-form-radio-group(v-model='$v.group.is_individual.$model' v-bind:disabled='group_id!==null')
+				b-form-radio-group(v-model='$v.group.is_individual.$model' v-bind:disabled='isExistedGroup')
 					b-form-radio(:value='false') Группа
 					b-form-radio(:value='true') Индивидуально
 	template(v-slot:modal-footer='{ edit, cancel, ok }')
 		// Emulate built in modal footer ok and cancel button actions
 		// Button with custom close trigger value
 		b-button.mr-auto(v-if="isReadonly" variant='outline-primary', @click="isReadonly = false; changedToEdit = true") Изменить
-		b-button.mr-auto(v-if="group_id!==null && !isReadonly && !changedToDelete" variant='danger', @click="changedToDelete = true") Удалить
-		b-button.mr-auto.shaked(v-if="group_id!==null && !isReadonly && changedToDelete" variant='danger' @click="deleteGroup()") Удалить?
+		b-button.mr-auto(v-if="isExistedGroup && !isReadonly && !changedToDelete" variant='danger', @click="changedToDelete = true") Удалить
+		b-button.mr-auto.shaked(v-if="isExistedGroup && !isReadonly && changedToDelete" variant='danger' @click="deleteGroup()") Удалить?
 		b-button(v-if="changedToEdit" variant='secondary', @click='cancel()') Отменить
 		b-button(v-if="changedToEdit" variant='primary', @click='ok()') Сохранить
 		b-button(v-else variant='primary', @click='cancel()') Закрыть
@@ -38,7 +38,7 @@ export default {
 			required: true,
 		},
 		group_id: {
-			required: true,
+			type: String,
 		},
 	},
 	components: {
@@ -70,6 +70,11 @@ export default {
 			allStudents: [],
 		}
 	},
+	computed: {
+		isExistedGroup() {
+			return this.group_id
+		},
+	},
 	methods: {
 		validateState(p) {
 			const { $dirty, $error } = p
@@ -93,14 +98,15 @@ export default {
 			this.isLoading = true
 			this.changedToDelete = false
 			this.$v.$reset()
-			this.isReadonly = this.group_id !== null //if group exist->readonly
+			this.isReadonly = this.isExistedGroup //if group exist->readonly
 			if (this.getAllStudents().length == 0) {
 				await this.$store.dispatch('students/fetchAll')
 			}
 			this.allStudents = this.getAllStudents()
 
-			if (this.group_id === null) {
+			if (!this.isExistedGroup) {
 				this.group = new Group()
+				this.changedToEdit = true
 			} else {
 				//cache
 				if (!this.getGroup().detailed) {
@@ -125,8 +131,7 @@ export default {
 			}
 			// if now individual grup->set student as member of group
 			//new group
-
-			if (this.group_id === null) {
+			if (!this.isExistedGroup) {
 				await this.$store.dispatch('groups/createGroup', this.group)
 			} else {
 				await this.$store.dispatch('groups/updateGroup', {

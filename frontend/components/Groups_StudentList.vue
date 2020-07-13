@@ -37,10 +37,6 @@ export default {
 			this.$loadingStart()
 
 			this.selectedStudent = null
-			if (!this.group) {
-				this.$loadingFinish()
-				return
-			}
 			if (!this.group.detailed) {
 				await this.$store.dispatch('groups/fetchByName', this.group.name)
 			}
@@ -50,7 +46,7 @@ export default {
 			this.$loadingStart()
 			await this.$store.dispatch('students/changeGroup', {
 				student,
-				group_id: null,
+				group_id: '',
 			})
 			this.$loadingFinish()
 		},
@@ -58,8 +54,9 @@ export default {
 	computed: {
 		group_from_store() {
 			//must be computed for reactivity, because getter returns a function
-			if (!this.group) return null
-			return this.$store.getters['groups/groupByName'](this.group.name)
+			if (this.group.isEmpty()) return null
+			const name = this.group.name
+			return this.$store.getters['groups/groupByName'](name)
 		},
 		students() {
 			return this.group_from_store ? this.group_from_store.students : []

@@ -35,7 +35,7 @@ export default {
 		studentNames: function () {
 			//TODO MAKE HERE ID OF GROUP, NOT NAME
 			return this.allStudents
-				.filter((el) => !el.group || el.group.name !== this.group_id)
+				.filter((el) => el.group.isEmpty() || el.group.name !== this.group_id)
 				.map((el) => filterFio(el))
 		},
 	},

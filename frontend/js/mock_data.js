@@ -197,7 +197,8 @@ var Mock = {
 		//if name changed
 		if (name !== newGroupData.name) {
 			this.studentList.forEach((element) => {
-				element.group = newGroupData.name
+				element.group =
+					element.group !== name ? element.group : newGroupData.name
 			})
 		}
 		extend(g, newGroupData)

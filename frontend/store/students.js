@@ -71,8 +71,9 @@ export const actions = {
 		}
 	},
 	async changeGroup({ dispatch, commit }, { student, group_id }) {
-		if (student.group === null && group_id === null) return
-		if (student.group && group_id && student.group.name === group_id) return
+		if (student.group.isEmpty() && !group_id) return
+		if (!student.group.isEmpty() && group_id && student.group.name === group_id)
+			return
 		commit('error/clearError', null, { root: true })
 		try {
 			//TODO Update in DB
@@ -84,9 +85,7 @@ export const actions = {
 
 			commit('updateStudent', updated_student)
 			//refresh new group
-			if (group_id) {
-				await dispatch('groups/fetchByName', group_id, { root: true })
-			}
+			await dispatch('groups/fetchByName', group_id, { root: true })
 			//refresh old group
 			if (last_group) {
 				if (last_group.is_individual) {

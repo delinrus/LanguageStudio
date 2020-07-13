@@ -18,7 +18,7 @@ export default class Student {
 		this.name = obj.name
 		this.patronymic = obj.patronymic
 		this.family = obj.family
-		this.group = obj.group === null ? null : new Group(obj.group, false)
+		this.group = new Group(obj.group, false)
 
 		this.address = obj.address ? obj.adress : ''
 		this.phone = obj.phone ? obj.phone : ''

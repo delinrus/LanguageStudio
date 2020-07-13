@@ -38,6 +38,7 @@ export const actions = {
 	},
 
 	async fetchByName({ getters, commit }, name) {
+		if (!name) return
 		commit('error/clearError', null, { root: true })
 		try {
 			//TODO find in DB
@@ -61,6 +62,7 @@ export const actions = {
 		}
 	},
 	async deleteGroupByName({ dispatch, commit }, name) {
+		if (!name) return
 		commit('error/clearError', null, { root: true })
 		try {
 			//TODO find in DB
@@ -75,15 +77,17 @@ export const actions = {
 			throw e
 		}
 	},
-	async updateGroup({ getters, commit }, { name, group }) {
+	async updateGroup({ dispatch, commit }, { name, group }) {
 		commit('error/clearError', null, { root: true })
+		console.log(`update group ${group.name}`)
 		try {
 			//TODO find in DB
 			const updated_group = new Group(await Mock.updateGroup(name, group), true)
-			commit('updateGroup', updated_group)
+			commit('updateGroup', { name, group: updated_group })
 			//refresh student list (group name can be changed)
 			if (name !== updated_group.name) {
-				commit('students/fetchAll', null, { root: true })
+				console.log('fetch all students')
+				await dispatch('students/fetchAll', null, { root: true })
 			}
 		} catch (e) {
 			commit('error/setError', e, { root: true })
@@ -94,6 +98,9 @@ export const actions = {
 
 export const getters = {
 	groups: (s) => s.groups,
-	groupByName: (state) => (name) =>
-		state.groups.filter((el) => el.name === name)[0],
+	groupByName: (state) =>
+		function (name) {
+			const list = state.groups.filter((el) => el.name === name)
+			return list.length ? list[0] : null
+		},
 }
