@@ -1,8 +1,12 @@
 package studio.okey.to;
 
-import lombok.Getter;
+import lombok.*;
 
 @Getter
+@Setter
+@NoArgsConstructor
+@ToString
+@EqualsAndHashCode
 public class StudentTo {
     private Long id;
     private String surname;

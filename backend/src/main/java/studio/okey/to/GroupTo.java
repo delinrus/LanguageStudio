@@ -1,8 +1,13 @@
 package studio.okey.to;
 
-import lombok.Getter;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
 
 @Getter
+@Setter
+@NoArgsConstructor
+@ToString
+@EqualsAndHashCode
 public class GroupTo {
     private String name;
     private boolean isIndividual;
@@ -14,4 +19,8 @@ public class GroupTo {
         this.studentCount = studentCount;
     }
 
+    @JsonProperty(value = "isIndividual")
+    public boolean isIndividual() {
+        return isIndividual;
+    }
 }
