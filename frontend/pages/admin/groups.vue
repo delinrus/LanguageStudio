@@ -50,6 +50,7 @@ export default {
 		currentSelectedGroup: new Group(),
 	}),
 	async mounted() {
+		console.log(process.env.NODE_ENV)
 		this.$loadingStart()
 		await this.$store.dispatch('groups/fetchAll')
 		this.groups = this.$store.getters['groups/groups']

@@ -53,13 +53,6 @@ export default {
 			is_individual: {},
 		},
 	},
-	computed: {
-		studentNames: function () {
-			//convert allStudents to names
-			const a = this.allStudents.map((el) => filterFio(el, 'long'))
-			return a
-		},
-	},
 	data() {
 		return {
 			changedToDelete: false,
@@ -71,8 +64,13 @@ export default {
 		}
 	},
 	computed: {
+		studentNames() {
+			//convert allStudents to names
+			const a = this.allStudents.map((el) => filterFio(el, 'long'))
+			return a
+		},
 		isExistedGroup() {
-			return this.group_id
+			return this.group_id !== ''
 		},
 	},
 	methods: {
@@ -103,7 +101,6 @@ export default {
 				await this.$store.dispatch('students/fetchAll')
 			}
 			this.allStudents = this.getAllStudents()
-
 			if (!this.isExistedGroup) {
 				this.group = new Group()
 				this.changedToEdit = true
@@ -129,11 +126,22 @@ export default {
 			if (!this.checkFormValidity()) {
 				return
 			}
-			// if now individual grup->set student as member of group
 			//new group
 			if (!this.isExistedGroup) {
+				//create group
 				await this.$store.dispatch('groups/createGroup', this.group)
+				//if individual group -> change group of individual student
+				if (this.group.is_individual) {
+					const s = this.getAllStudents().find(
+						(el) => filterFio(el, 'long') === this.group.name
+					)
+					await this.$store.dispatch('students/changeGroup', {
+						student: s,
+						group_id: this.group.name,
+					})
+				}
 			} else {
+				//if group exist->only update group data
 				await this.$store.dispatch('groups/updateGroup', {
 					name: this.group_id,
 					group: this.group,

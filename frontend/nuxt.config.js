@@ -1,7 +1,7 @@
 import pkg from './package'
 
 export default {
-	mode: 'spa',
+	mode: 'spa', //for mirage need spa. If need universal, then => mode: process.env.NODE_ENV === 'development' ? 'spa' : 'universal'
 
 	generate: {
 		dir: 'target/dist',
@@ -38,6 +38,7 @@ export default {
 	 ** Plugins to load before mounting the App
 	 */
 	plugins: [
+		'@/plugins/mirage.js',
 		'@/plugins/vuelidate.plugin.js',
 		'@/plugins/fio.filter.plugin.js',
 		'@/plugins/messages.plugin.js',

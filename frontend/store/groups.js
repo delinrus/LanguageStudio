@@ -1,4 +1,3 @@
-import Mock from '@/js/mock_data'
 import Group from '../js/group_class'
 
 export const state = () => ({
@@ -26,8 +25,8 @@ export const mutations = {
 export const actions = {
 	async fetchAll({ commit }) {
 		try {
-			//TODO get from DB
-			const groups = (await Mock.getGroups()).map(function (el) {
+			const response = await this.$axios.$get('/api/groups/')
+			const groups = response.map(function (el) {
 				return new Group(el, false)
 			})
 			commit('setGroups', groups)
@@ -36,13 +35,12 @@ export const actions = {
 			throw e
 		}
 	},
-
 	async fetchByName({ getters, commit }, name) {
 		if (!name) return
 		commit('error/clearError', null, { root: true })
 		try {
-			//TODO find in DB
-			const group = new Group(await Mock.getGroupDetailsByName(name), true)
+			const response = await this.$axios.$get(`/api/groups/${name}`)
+			const group = new Group(response, true)
 			commit('updateGroup', { name, group })
 			//if (!group) throw { message: `group with name ${name} not exist` }
 		} catch (e) {
@@ -53,8 +51,11 @@ export const actions = {
 	async createGroup({ getters, commit }, newGroup) {
 		commit('error/clearError', null, { root: true })
 		try {
-			//TODO find in DB
-			const updated_group = new Group(await Mock.addGroup(newGroup), true)
+			const response = await this.$axios.$post(
+				'/api/groups/',
+				JSON.stringify(newGroup)
+			)
+			const updated_group = new Group(response, true)
 			commit('updateGroup', { name: updated_group.name, group: updated_group })
 		} catch (e) {
 			commit('error/setError', e, { root: true })
@@ -65,13 +66,13 @@ export const actions = {
 		if (!name) return
 		commit('error/clearError', null, { root: true })
 		try {
-			//TODO find in DB
-			await Mock.deleteGroupByName(name)
+			await this.$axios.$delete(`/api/groups/${name}`)
 			//refresh student list (students will be excluded from group)
 
 			commit('updateGroup', { name, group: null })
 
 			await dispatch('students/fetchAll', null, { root: true })
+			await dispatch('groups/fetchAll', null, { root: true })
 		} catch (e) {
 			commit('error/setError', e, { root: true })
 			throw e
@@ -79,14 +80,15 @@ export const actions = {
 	},
 	async updateGroup({ dispatch, commit }, { name, group }) {
 		commit('error/clearError', null, { root: true })
-		console.log(`update group ${group.name}`)
 		try {
-			//TODO find in DB
-			const updated_group = new Group(await Mock.updateGroup(name, group), true)
+			const response = await this.$axios.$post(
+				`/api/groups/${name}`,
+				JSON.stringify(group)
+			)
+			const updated_group = new Group(response, true)
 			commit('updateGroup', { name, group: updated_group })
 			//refresh student list (group name can be changed)
 			if (name !== updated_group.name) {
-				console.log('fetch all students')
 				await dispatch('students/fetchAll', null, { root: true })
 			}
 		} catch (e) {

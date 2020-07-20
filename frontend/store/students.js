@@ -1,4 +1,3 @@
-import Mock from '@/js/mock_data'
 import Student from '@/js/student_class'
 export const state = () => ({
 	students: [],
@@ -24,8 +23,8 @@ export const mutations = {
 export const actions = {
 	async fetchAll({ commit }) {
 		try {
-			//TODO get from DB
-			const students = (await Mock.getStudents()).map(function (el) {
+			const response = await this.$axios.$get('/api/students/')
+			const students = response.map(function (el) {
 				return new Student(el, false)
 			})
 			commit('set', students)
@@ -38,8 +37,8 @@ export const actions = {
 	async fetchById({ getters, commit }, id) {
 		commit('error/clearError', null, { root: true })
 		try {
-			//TODO find in DB
-			const student = new Student(await Mock.getStudentById(id), true)
+			const response = await this.$axios.$get(`/api/students/${id}`)
+			const student = new Student(response, true)
 
 			commit('updateStudent', student)
 		} catch (e) {
@@ -51,8 +50,11 @@ export const actions = {
 	async createStudent({ dispatch, commit }, student) {
 		commit('error/clearError', null, { root: true })
 		try {
-			//TODO SAVE in DB
-			const s = new Student(await Mock.addStudent(student), true)
+			const response = await this.$axios.$post(
+				'/api/students/',
+				JSON.stringify(student)
+			)
+			const s = new Student(response, true)
 			commit('updateStudent', s)
 		} catch (e) {
 			commit('error/setError', e, { root: true })
@@ -62,9 +64,26 @@ export const actions = {
 	async updateStudent({ dispatch, commit }, student) {
 		commit('error/clearError', null, { root: true })
 		try {
-			//TODO SAVE in DB
-			const updated = new Student(await Mock.updateStudent(student), true)
+			const response = await this.$axios.$post(
+				`/api/students/${student.id}`,
+				JSON.stringify(student)
+			)
+			const updated = new Student(response, true)
 			commit('updateStudent', updated)
+		} catch (e) {
+			commit('error/setError', e, { root: true })
+			throw e
+		}
+	},
+	async deleteStudent({ dispatch, commit }, id) {
+		commit('error/clearError', null, { root: true })
+		try {
+			await this.$axios.$del(`/api/students/${id}`)
+			commit('removeStudentById', id)
+			//refresh groups, because groups may be changed,for ex:
+			//1) deleted individuals
+			//2) list of group student will change
+			await dispatch('groups/fetchAll', null, { root: true })
 		} catch (e) {
 			commit('error/setError', e, { root: true })
 			throw e
@@ -76,16 +95,14 @@ export const actions = {
 			return
 		commit('error/clearError', null, { root: true })
 		try {
-			//TODO Update in DB
 			const last_group = student.group
-			const updated_student = new Student(
-				await Mock.studentSetGroup(student, group_id),
-				true
+			const request_data = { ...student, group: group_id }
+			const response = await this.$axios.$post(
+				`/api/students/${student.id}`,
+				JSON.stringify(request_data)
 			)
-
+			const updated_student = new Student(response, true)
 			commit('updateStudent', updated_student)
-			//refresh new group
-			await dispatch('groups/fetchByName', group_id, { root: true })
 			//refresh old group
 			if (last_group) {
 				if (last_group.is_individual) {
@@ -95,6 +112,8 @@ export const actions = {
 				} else {
 					await dispatch('groups/fetchByName', last_group.name, { root: true })
 				}
+				//refresh new group
+				await dispatch('groups/fetchByName', group_id, { root: true })
 			}
 		} catch (e) {
 			commit('error/setError', e, { root: true })

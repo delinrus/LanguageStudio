@@ -17,12 +17,13 @@
     "bootstrap-vue": "^2.15.0",
     "cross-env": "^5.2.0",
     "element-ui": "^2.9.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "nuxt": "^2.12.2",
     "nuxt-material-design-icons": "^1.0.4",
     "vuelidate": "^0.7.5"
   },
   "devDependencies": {
+    "miragejs": "^0.1.40",
     "node-sass": "^4.14.1",
     "nodemon": "^2.0.4",
     "prettier": "2.0.5",

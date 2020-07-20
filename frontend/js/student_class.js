@@ -20,7 +20,7 @@ export default class Student {
 		this.family = obj.family
 		this.group = new Group(obj.group, false)
 
-		this.address = obj.address ? obj.adress : ''
+		this.address = obj.address ? obj.address : ''
 		this.phone = obj.phone ? obj.phone : ''
 
 		this.parents = obj.parents ? [...obj.parents] : []
