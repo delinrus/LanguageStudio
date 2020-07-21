@@ -90,9 +90,7 @@ export const actions = {
 		}
 	},
 	async changeGroup({ dispatch, commit }, { student, group_id }) {
-		if (student.group.isEmpty() && !group_id) return
-		if (!student.group.isEmpty() && group_id && student.group.name === group_id)
-			return
+		if (student.group.id === group_id) return
 		commit('error/clearError', null, { root: true })
 		try {
 			const last_group = student.group
@@ -106,14 +104,14 @@ export const actions = {
 			//refresh old group
 			if (last_group) {
 				if (last_group.is_individual) {
-					await dispatch('groups/deleteGroupByName', last_group.name, {
+					await dispatch('groups/deleteGroupById', last_group.id, {
 						root: true,
 					})
 				} else {
-					await dispatch('groups/fetchByName', last_group.name, { root: true })
+					await dispatch('groups/fetchById', last_group.id, { root: true })
 				}
 				//refresh new group
-				await dispatch('groups/fetchByName', group_id, { root: true })
+				await dispatch('groups/fetchById', group_id, { root: true })
 			}
 		} catch (e) {
 			commit('error/setError', e, { root: true })

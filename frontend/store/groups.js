@@ -8,8 +8,8 @@ export const mutations = {
 	setGroups(state, groups) {
 		state.groups = groups
 	},
-	updateGroup(state, { name, group }) {
-		const index = state.groups.findIndex((g) => g.name === name)
+	updateGroup(state, { id, group }) {
+		const index = state.groups.findIndex((g) => g.id === id)
 		if ((index >= 0) & (group === null)) {
 			state.groups.splice(index, 1)
 			return
@@ -35,13 +35,13 @@ export const actions = {
 			throw e
 		}
 	},
-	async fetchByName({ getters, commit }, name) {
-		if (!name) return
+	async fetchById({ getters, commit }, id) {
+		if (!id) return
 		commit('error/clearError', null, { root: true })
 		try {
-			const response = await this.$axios.$get(`/api/groups/${name}`)
+			const response = await this.$axios.$get(`/api/groups/${id}`)
 			const group = new Group(response, true)
-			commit('updateGroup', { name, group })
+			commit('updateGroup', { id, group })
 			//if (!group) throw { message: `group with name ${name} not exist` }
 		} catch (e) {
 			commit('error/setError', e, { root: true })
@@ -56,39 +56,44 @@ export const actions = {
 				JSON.stringify(newGroup)
 			)
 			const updated_group = new Group(response, true)
-			commit('updateGroup', { name: updated_group.name, group: updated_group })
+			commit('updateGroup', { id: updated_group.id, group: updated_group })
 		} catch (e) {
 			commit('error/setError', e, { root: true })
 			throw e
 		}
 	},
-	async deleteGroupByName({ dispatch, commit }, name) {
-		if (!name) return
+	async deleteGroupById({ dispatch, commit, getters }, id) {
+		if (!id) return
 		commit('error/clearError', null, { root: true })
 		try {
-			await this.$axios.$delete(`/api/groups/${name}`)
+			await this.$axios.$delete(`/api/groups/${id}`)
 			//refresh student list (students will be excluded from group)
+			const deleted_group_students = getters.groupById(id).student_count
+			commit('updateGroup', { id, group: null })
 
-			commit('updateGroup', { name, group: null })
-
-			await dispatch('students/fetchAll', null, { root: true })
-			await dispatch('groups/fetchAll', null, { root: true })
+			if (deleted_group_students) {
+				await dispatch('students/fetchAll', null, { root: true })
+			}
 		} catch (e) {
 			commit('error/setError', e, { root: true })
 			throw e
 		}
 	},
-	async updateGroup({ dispatch, commit }, { name, group }) {
+	async updateGroup({ dispatch, commit, getters }, { id, group }) {
 		commit('error/clearError', null, { root: true })
 		try {
+			const last_name = getters.groupById(id).name
 			const response = await this.$axios.$post(
-				`/api/groups/${name}`,
+				`/api/groups/${id}`,
 				JSON.stringify(group)
 			)
 			const updated_group = new Group(response, true)
-			commit('updateGroup', { name, group: updated_group })
+			commit('updateGroup', { id, group: updated_group })
 			//refresh student list (group name can be changed)
-			if (name !== updated_group.name) {
+			if (
+				last_name !== updated_group.name &&
+				updated_group.students.length > 0
+			) {
 				await dispatch('students/fetchAll', null, { root: true })
 			}
 		} catch (e) {
@@ -100,9 +105,9 @@ export const actions = {
 
 export const getters = {
 	groups: (s) => s.groups,
-	groupByName: (state) =>
-		function (name) {
-			const list = state.groups.filter((el) => el.name === name)
+	groupById: (state) =>
+		function (id) {
+			const list = state.groups.filter((el) => el.id === id)
 			return list.length ? list[0] : null
 		},
 }

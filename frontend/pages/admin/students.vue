@@ -31,7 +31,7 @@
 							.row.d-flex.justify-content-between.align-items-center
 								.col-8.border-right  {{student | fio('full')}}
 								.col-4.text-center
-									span(v-if="!student.group") -
+									span(v-if="student.group.isEmpty()") -
 									span(v-else-if="!student.group.is_individual") {{student.group.name}}
 									span(v-else) Индивидуальный
 							.row(v-if="student===currentSelected").pt-3

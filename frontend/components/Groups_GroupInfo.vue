@@ -70,7 +70,7 @@ export default {
 			return a
 		},
 		isExistedGroup() {
-			return this.group_id !== ''
+			return this.group_id !== null
 		},
 	},
 	methods: {
@@ -87,7 +87,7 @@ export default {
 			return is_valid
 		},
 		getGroup() {
-			return this.$store.getters['groups/groupByName'](this.group_id)
+			return this.$store.getters['groups/groupById'](this.group_id)
 		},
 		getAllStudents() {
 			return this.$store.getters['students/students']
@@ -107,7 +107,7 @@ export default {
 			} else {
 				//cache
 				if (!this.getGroup().detailed) {
-					await this.$store.dispatch('groups/fetchByName', this.group_id)
+					await this.$store.dispatch('groups/fetchById', this.group_id)
 				}
 				this.group = this.getGroup().clone()
 			}
@@ -137,13 +137,13 @@ export default {
 					)
 					await this.$store.dispatch('students/changeGroup', {
 						student: s,
-						group_id: this.group.name,
+						group_id: this.group.id,
 					})
 				}
 			} else {
 				//if group exist->only update group data
 				await this.$store.dispatch('groups/updateGroup', {
-					name: this.group_id,
+					id: this.group_id,
 					group: this.group,
 				})
 			}
@@ -153,7 +153,7 @@ export default {
 		},
 		async deleteGroup() {
 			this.isLoading = true
-			await this.$store.dispatch('groups/deleteGroupByName', this.group_id)
+			await this.$store.dispatch('groups/deleteGroupById', this.group_id)
 			this.$nextTick(() => {
 				this.$bvModal.hide(this.id)
 			})

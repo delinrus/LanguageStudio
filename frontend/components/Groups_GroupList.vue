@@ -1,13 +1,13 @@
 <template lang="pug">
 div
-	ModalForm_GroupInfo(id="form_changeGroup" v-bind:group_id="selectedGroup.name")
+	ModalForm_GroupInfo(id="form_changeGroup" v-bind:group_id="selectedGroup.id")
 	.list-group-flush(v-for="(group,idx) of groupList")
 		.card.border-light.no-border
 			.card-body.p-0
 				button(@click="onSelectClick(group)"
 				).list-group-item.list-group-item-action.justify-content-between.align-items-center.p-0
 					//show for selected
-					div(v-if="selectedGroup.name==group.name")
+					div(v-if="selectedGroup.id==group.id")
 						//on big devices - no expand
 						.card.border-light.no-border.hide_on_small
 								.card-header

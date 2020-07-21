@@ -33,9 +33,8 @@ export default {
 	},
 	computed: {
 		studentNames: function () {
-			//TODO MAKE HERE ID OF GROUP, NOT NAME
 			return this.allStudents
-				.filter((el) => el.group.isEmpty() || el.group.name !== this.group_id)
+				.filter((el) => el.group.isEmpty() || el.group.id !== this.group_id)
 				.map((el) => filterFio(el))
 		},
 	},
@@ -73,7 +72,7 @@ export default {
 				student,
 				group_id: this.group_id,
 			})
-			//await this.$store.dispatch('groups/fetchByName', this.group_id)
+			//await this.$store.dispatch('groups/fetchById', this.group_id)
 			this.resetForm()
 		},
 

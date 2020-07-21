@@ -7,7 +7,7 @@ const studentList = [
 		name: 'Иван',
 		family: 'Иванов',
 		patronymic: 'Иванович',
-		group: '2a',
+		groupId: 1,
 		address: 'Адрес Иванова',
 		phone: '+71234567890',
 		parents: [],
@@ -17,7 +17,7 @@ const studentList = [
 		name: 'Петя',
 		family: 'Петров',
 		patronymic: 'Петрович',
-		group: '2a',
+		groupId: 1,
 		address: 'Адрес Петрова',
 		phone: '+71234567891',
 		parents: [],
@@ -27,7 +27,7 @@ const studentList = [
 		name: 'Василий',
 		family: 'Сидров',
 		patronymic: 'Александрович',
-		group: '2a',
+		groupId: 1,
 		address: 'Адрес Сидорова',
 		phone: '+71234567892',
 		parents: [],
@@ -37,7 +37,7 @@ const studentList = [
 		name: 'Ачумбек',
 		family: 'Кызы',
 		patronymic: 'Ачумбекович',
-		group: 'Кызы Ачумбек Ачумбекович',
+		groupId: 2,
 		address: 'Адрес Кызы',
 		phone: '+71234567893',
 		parents: [],
@@ -47,7 +47,7 @@ const studentList = [
 		name: 'Андрей',
 		family: 'Безгрупный',
 		patronymic: 'Давидович',
-		group: null,
+		groupId: null,
 		address: '',
 		phone: '',
 		parents: [],
@@ -55,10 +55,12 @@ const studentList = [
 ]
 const groupList = [
 	{
+		id: 1,
 		name: '2a',
 		is_individual: false,
 	},
 	{
+		id: 2,
 		name: 'Кызы Ачумбек Ачумбекович',
 		is_individual: true,
 	},
@@ -80,39 +82,27 @@ var ApplicationSerializer = RestSerializer.extend({
 		return attr
 	},
 })
+
 export function makeServer({ environment = 'development' } = {}) {
 	let server = new Server({
 		environment,
-
 		models: {
 			student: Model.extend({
 				group: belongsTo(),
 			}),
 			group: Model,
 		},
-
 		seeds(server) {
 			groupList.forEach((el) => {
 				server.create('group', el)
 			})
 			studentList.forEach((el) => {
-				server.create('student', {
-					...el,
-					group: server.schema.groups.findBy({ name: el.group }),
-				})
+				server.create('student', el)
 			})
-		},
-
-		extractGroupByName(name) {
-			var group = schema.groups.all().find((g) => g.name === name)
-			if (group === null) return null
-			group.student_count = this.studentList.filter(
-				(s) => s.group === name
-			).length
-			return { ...group }
 		},
 		routes() {
 			this.namespace = 'api'
+			this.logging = false
 			this.timing = 500
 			this.get('/students', function (schema, request) {
 				const students = schema.students.all()
@@ -139,7 +129,7 @@ export function makeServer({ environment = 'development' } = {}) {
 				return json
 			})
 			this.get('/groups/:id', function (schema, request) {
-				const group = schema.groups.findBy({ name: request.params.id })
+				const group = schema.groups.find(request.params.id)
 				var json = this.serialize(group, 'group')
 				const students = schema.students.where({ groupId: group.id })
 				const students_jsons = this.serialize(students, 'student-short')
@@ -165,7 +155,7 @@ export function makeServer({ environment = 'development' } = {}) {
 			this.post('/students/:id', function (schema, request) {
 				var attr = JSON.parse(request.requestBody)
 				if (attr.group) {
-					attr.group = schema.groups.findBy({ name: attr.group })
+					attr.group = schema.groups.find(attr.group)
 					attr.groupId = attr.group.id
 				} else {
 					attr.group = null
@@ -191,14 +181,32 @@ export function makeServer({ environment = 'development' } = {}) {
 			})
 			this.post('/groups/:id', function (schema, request) {
 				var attr = JSON.parse(request.requestBody)
-				const group = schema.groups.findBy({ name: request.params.id })
+				var group = schema.groups.find(request.params.id)
 				group.update('name', attr.name)
-				group.update('is_idividual', attr.is_individual)
-				const json = this.serialize(group, 'group')
+				group.update('is_individual', attr.is_individual)
+				//return details json
+				var json = this.serialize(group, 'group')
+				const students = schema.students.where({ groupId: group.id })
+				const students_jsons = this.serialize(students, 'student-short')
+				students_jsons.forEach((el) => {
+					el.group = this.serialize(group, 'group-short')
+				})
+				json.students = students_jsons
 				return json
 			})
 			this.del('/groups/:id', function (schema, request) {
-				const group = schema.groups.findBy({ name: request.params.id })
+				//remove students with deleting group from group
+				const students = schema.db.students.where({
+					groupId: request.params.id,
+				})
+				if (students) {
+					students.forEach((el) => {
+						el.groupId = null
+						el.group = null
+						schema.db.students.update(el.id, el)
+					})
+				}
+				var group = schema.groups.find(request.params.id)
 				group.destroy()
 			})
 		},
@@ -210,9 +218,27 @@ export function makeServer({ environment = 'development' } = {}) {
 				attrs: ['id', 'name', 'family', 'patronymic', 'group'],
 				embed: false,
 			}),
-			group: ApplicationSerializer,
+			group: ApplicationSerializer.extend({
+				serialize(object, options) {
+					let json = RestSerializer.prototype.serialize.apply(this, arguments)
+					if (Array.isArray(json)) {
+						//if serialize array
+						json.forEach((element) => {
+							element.student_count = this.schema.students.where({
+								groupId: element.id,
+							}).length
+						})
+					} else {
+						//if serialize single object
+						json.student_count = this.schema.students.where({
+							groupId: arguments[0].id,
+						}).length
+					}
+					return json
+				},
+			}),
 			groupShort: ApplicationSerializer.extend({
-				attr: ['name', 'is_individual'],
+				attr: ['id', 'name', 'is_individual'],
 				serialize(object, options) {
 					let json = RestSerializer.prototype.serialize.apply(this, arguments)
 					if (Array.isArray(json)) {

@@ -3,6 +3,7 @@ import Student from './student_class'
 export default class Group {
 	constructor(obj, detailed) {
 		if (!obj) {
+			this.id = null
 			this.detailed = false
 			this.name = ''
 			this.students = []
@@ -10,6 +11,7 @@ export default class Group {
 			this.student_count = 0
 			return
 		}
+		this.id = obj.id
 		this.detailed = detailed
 		this.name = obj.name
 		this.is_individual = obj.is_individual
@@ -29,6 +31,6 @@ export default class Group {
 	}
 
 	isEmpty() {
-		return this.name === ''
+		return this.id === null
 	}
 }
