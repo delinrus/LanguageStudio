@@ -14,7 +14,7 @@ b-modal(:id = 'id' title='Карточка ученика', @show='onShowForm', 
 				b-form-input(v-model='$v.student.address.$model'  type='text'  :state='$v.student.address.$dirty? true:null'  v-bind:readonly='isReadonly')
 		.row(v-if='student.group!==null')
 			b-form-group.col-6(label='Группа:', invalid-feedback='Укажите группу')
-				b-form-select(v-model='$v.student.group.$model' :options='groupNames' v-bind:disabled='isReadonly')
+				b-form-select(v-model='$v.student.group.$model' :options='getGroups' text-field="name" value-field="id" v-bind:disabled='isReadonly')
 		.row
 			b-form-group.col-6(label='Телефон для связи:' invalid-feedback='Введите телефон')
 				b-input-group
@@ -104,8 +104,8 @@ export default {
 		},
 	},
 	computed: {
-		groupNames() {
-			return this.$store.getters['groups/groups'].map((el) => el.name)
+		getGroups() {
+			return this.$store.getters['groups/groups']
 		},
 	},
 	data() {
@@ -139,7 +139,7 @@ export default {
 			if (this.student_id) {
 				this.changedToEdit = false
 				//cache
-				if (this.groupNames.length == 0) {
+				if (this.getGroups.length == 0) {
 					await this.$store.dispatch('groups/fetchAll')
 				}
 
@@ -154,7 +154,7 @@ export default {
 				//}
 				this.student = this.getStudent().clone()
 
-				this.student.group = this.student.group.name
+				this.student.group = this.student.group.id
 				if (!this.student.parents) {
 					this.student.parents = []
 				}

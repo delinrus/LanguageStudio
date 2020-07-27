@@ -148,6 +148,11 @@ export function makeServer({ environment = 'development' } = {}) {
 			})
 			this.post('/students/', function (schema, request) {
 				var attr = JSON.parse(request.requestBody)
+				if (attr.group) {
+					attr.groupId = attr.group
+				} else {
+					attr.groupId = null
+				}
 				const student = schema.students.create(attr)
 				const json = this.serialize(student, 'student')
 				return json

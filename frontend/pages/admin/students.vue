@@ -29,11 +29,11 @@
 							@click="currentSelected = student"
 						).list-group-item.list-group-item-action.justify-content-between.align-items-center
 							.row.d-flex.justify-content-between.align-items-center
-								.col-8.border-right  {{student | fio('full')}}
+								.col-8.border-right  {{student | fio('short')}}
 								.col-4.text-center
 									span(v-if="student.group.isEmpty()") -
 									span(v-else-if="!student.group.is_individual") {{student.group.name}}
-									span(v-else) Индивидуальный
+									span(v-else) инд.
 							.row(v-if="student===currentSelected").pt-3
 								.col-12
 									button.btn.btn-info Оплата
@@ -69,7 +69,7 @@ export default {
 				el.group && el.group.is_individual
 					? Object.values(el)
 							.join(' ')
-							.concat('Индивидуальный')
+							.concat('индивидуальный')
 							.toLowerCase()
 							.includes(this.searchString.toLowerCase())
 					: Object.values(el)

@@ -1,69 +1,49 @@
 <template lang="pug">
 #sidebar.shadow-lg
 	.sidebar-header
-		ul.list-unstyled.components
-			p.text-secondary Панель управления
-			li.nav-item.active
-				nuxt-link.nav-link(
+		ul.list-unstyled.components.p-0.pt-3
+			p.text-secondary.hide_on_small.m-0.p-3.pt-3 Панель управления
+			li.nav-item.active(v-for="(l) of links")
+				nuxt-link.nav-link.p-3(
 					no-prefetch
 					active-class="active"
-					to='/admin/students'
+					:to="l.path"
 					)
-					i.material-icons.align-middle.mr-2 supervisor_account
-					span Ученики
-			li.nav-item.active
-				nuxt-link.nav-link(
-					no-prefetch
-					active-class="active"
-					to='/admin/groups'
-					)
-					i.material-icons.align-middle.mr-2 school
-					span Группы
-			li.nav-item.active
-				nuxt-link.nav-link(
-					no-prefetch
-					active-class="active"
-					to='/admin/attendance'
-					)
-					i.material-icons.align-middle.mr-2 import_contacts
-					span Посещаемость
-			li.nav-item.active
-				nuxt-link.nav-link(
-					no-prefetch
-					active-class="active"
-					to='/admin/marks'
-					)
-					i.material-icons.align-middle.mr-2 looks_5
-					span Оценки
+					i.h4.material-icons.align-baseline.mr-2.align-top(style="font-size:1.3rem;") {{l.icon}}
+					span.hide_on_small_inline {{l.title}}
 </template>
 
 <script>
 export default {
+	props: {},
 	data: () => ({
-		isOpen: true
-	})
+		links: [
+			{ path: '/admin/students', icon: 'supervisor_account', title: 'Ученики' },
+			{ path: '/admin/groups', icon: 'school', title: 'Группы' },
+			{
+				path: '/admin/diary',
+				icon: 'import_contacts',
+				title: 'Журнал',
+			},
+			//{ path: '/admin/marks', icon: 'looks_5', title: 'Оценки' },
+		],
+	}),
 }
 </script>
 
 <style lang="scss" scoped>
 @import 'assets/scss/main.scss';
+
+//on small
 #sidebar {
-	min-width: 250px;
-	max-width: 250px;
+	min-width: 60px;
+	max-width: 60px;
 	min-height: 100vh;
 	transition: all 0.3s;
 	background: var(--dark);
-	ul.components {
-		padding: 1rem 0rem;
-	}
 	ul {
-		p {
-			padding: $spacer;
-		}
 		li {
 			a {
-				padding: $spacer;
-				font-size: 0.9em;
 				display: block;
 				color: var(--secondary);
 				&:hover {
@@ -73,6 +53,30 @@ export default {
 			a.active {
 				color: var(--primary);
 				background: var(--light);
+			}
+		}
+	}
+}
+
+@include media-breakpoint-up(md) {
+	#sidebar {
+		min-width: 250px;
+		max-width: 250px;
+		min-height: 100vh;
+		background: var(--dark);
+		ul {
+			li {
+				a {
+					display: block;
+					color: var(--secondary);
+					&:hover {
+						color: var(--primary);
+					}
+				}
+				a.active {
+					color: var(--primary);
+					background: var(--light);
+				}
 			}
 		}
 	}

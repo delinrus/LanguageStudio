@@ -25,7 +25,7 @@
 				Groups_StudentList(:group='currentSelectedGroup')
 			footer.m-3.mt-0.text-right(v-if="!currentSelectedGroup.isEmpty() && !currentSelectedGroup.is_individual")
 				Groups_StudentAdder(:group_id='currentSelectedGroup.id')
-	</template>
+</template>
 
 <script>
 import GroupsList from '~/components/Groups_GroupList'

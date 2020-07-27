@@ -110,6 +110,14 @@ section,
 		display: block !important; //d-md-block
 	}
 }
+
+.hide_on_small_inline {
+	display: none !important; //d-none
+	@media (min-width: 768px) {
+		display: inline !important; //d-md-block
+	}
+}
+
 .visible_on_small {
 	@media (min-width: 576px) {
 		display: block !important; //d-sm-block
@@ -118,6 +126,16 @@ section,
 		display: none !important; //d-md-none
 	}
 }
+
+.visible_on_small_inline {
+	@media (min-width: 576px) {
+		display: inline !important; //d-sm-block
+	}
+	@media (min-width: 768px) {
+		display: none !important; //d-md-none
+	}
+}
+
 .no-border {
 	border: 0;
 }

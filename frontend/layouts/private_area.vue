@@ -1,12 +1,11 @@
 <template lang="pug">
 div
-	Navbar
+	Navbar(@onCollapseButtonClick='onCollapseButtonClick')
 	.wrapper
 		Sidebar
 		.container
 			main
 				nuxt
-
 </template>
 
 <script>
@@ -17,6 +16,7 @@ export default {
 		Navbar,
 		Sidebar,
 	},
+	data: () => ({}),
 	computed: {
 		error() {
 			return this.$store.getters['error/error']
@@ -31,6 +31,11 @@ export default {
 		},
 		notify(value) {
 			if (value) this.$message(value.message)
+		},
+	},
+	methods: {
+		onCollapseButtonClick() {
+			//this.isSideBarOpen = !this.isSideBarOpen
 		},
 	},
 }
