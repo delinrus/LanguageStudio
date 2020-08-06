@@ -7,7 +7,7 @@
 		.row
 			.col-md.col-sm-12.px-sm-0.px-md-3
 				.form-group
-					b-form-select(v-model='$v.addedStudent.$model' :options='studentNames' :state='validateState($v.addedStudent)' :disabled='isLoadingStudents')
+					b-form-select(v-model='$v.addedStudent.$model' :options='studentOptions' :state='validateState($v.addedStudent)' :disabled='isLoadingStudents')
 			.col-md.col-sm-12
 				.row
 					button.col-5.btn.btn-outline-primary(@click='handleCancelAddStudentToGroup()') Отмена
@@ -32,17 +32,22 @@ export default {
 		addedStudent: { required },
 	},
 	computed: {
-		studentNames: function () {
+		studentOptions: function () {
 			return this.allStudents
 				.filter((el) => el.group.isEmpty() || el.group.id !== this.group_id)
-				.map((el) => filterFio(el))
+				.map(function (el) {
+					return {
+						text: filterFio(el),
+						value: el,
+					}
+				})
 		},
 	},
 	data() {
 		return {
 			allStudents: [],
 			isLoadingStudents: true,
-			addedStudent: '', //student name for add
+			addedStudent: null, //student  for add
 			showStudentAdder: false, //add student form
 		}
 	},
@@ -65,11 +70,8 @@ export default {
 			if (!this.checkFormValidity()) {
 				return
 			}
-			const student = this.allStudents.find(
-				(el) => filterFio(el) === this.addedStudent
-			)
 			await this.$store.dispatch('students/changeGroup', {
-				student,
+				student: this.addedStudent,
 				group_id: this.group_id,
 			})
 			//await this.$store.dispatch('groups/fetchById', this.group_id)

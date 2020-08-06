@@ -20,6 +20,16 @@ export const mutations = {
 			state.groups.push(group)
 		}
 	},
+	updateLessonOfGroup(state, { id, lesson }) {
+		var group = state.groups.find((g) => g.id === id)
+
+		const lesson_index = group.lessons.findIndex((l) => l.id === id)
+		if (lesson_index >= 0) {
+			group.lessons.splice(lesson_index, 1, lesson)
+		} else {
+			group.lessons.push(lesson)
+		}
+	},
 }
 
 export const actions = {

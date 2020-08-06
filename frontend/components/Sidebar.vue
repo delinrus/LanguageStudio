@@ -21,7 +21,7 @@ export default {
 			{ path: '/admin/students', icon: 'supervisor_account', title: 'Ученики' },
 			{ path: '/admin/groups', icon: 'school', title: 'Группы' },
 			{
-				path: '/admin/diary',
+				path: '/admin/journal',
 				icon: 'import_contacts',
 				title: 'Журнал',
 			},

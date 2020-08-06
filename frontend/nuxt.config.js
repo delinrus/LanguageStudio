@@ -41,6 +41,7 @@ export default {
 		'@/plugins/mirage.js',
 		'@/plugins/vuelidate.plugin.js',
 		'@/plugins/fio.filter.plugin.js',
+		'@/plugins/date.filter.plugin.js',
 		'@/plugins/messages.plugin.js',
 		'@/plugins/loading.plugin.js',
 	],
