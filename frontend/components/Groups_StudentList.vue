@@ -54,12 +54,10 @@ export default {
 	computed: {
 		group_from_store() {
 			//must be computed for reactivity, because getter returns a function
-			if (this.group.isEmpty()) return null
-			const id = this.group.id
-			return this.$store.getters['groups/groupById'](id)
+			return this.$store.getters['groups/groupById'](this.group.id)
 		},
 		students() {
-			return this.group_from_store ? this.group_from_store.students : []
+			return this.group_from_store.students
 		},
 	},
 	watch: {

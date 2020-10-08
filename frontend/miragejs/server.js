@@ -1,6 +1,6 @@
 // src/server.js
 import { Server, Model, belongsTo, RestSerializer, hasMany } from 'miragejs'
-
+import { AttendanceEnum, HomeworkEnum } from '@/js/lesson_item_class'
 const studentList = [
 	{
 		id: 1,
@@ -75,7 +75,7 @@ const firstGroupLessons = [
 		theme: 'Present Simple',
 		homework: '',
 		description: 'Очень простое примечание',
-		students: [1, 2, 4],
+		//students: [1, 2, 4],
 	},
 	{
 		id: 2,
@@ -84,7 +84,7 @@ const firstGroupLessons = [
 		homework: 'Задала домашнее задание, упражнения №1,2,3',
 		description:
 			'Длинное длинное длинное примечание, очень и очень простое примечание. Здесь можно написать кто виноват и что делали на уроке',
-		students: [1, 2, 4],
+		//students: [1, 2, 4],
 	},
 	{
 		id: 3,
@@ -93,7 +93,7 @@ const firstGroupLessons = [
 		homework:
 			'Длинное домашнее задание, сделать много упражнений и собственных примером. Сделать дома тест',
 		description: '',
-		students: [1, 2, 4],
+		//students: [1, 2, 4],
 	},
 	{
 		id: 4,
@@ -102,7 +102,7 @@ const firstGroupLessons = [
 		homework:
 			'Listen and read. Number the pictures. – Послушайте и прочитайте. Пронумеруйте картинки.',
 		description: '',
-		students: [1, 2, 4],
+		//students: [1, 2, 4],
 	},
 	{
 		id: 5,
@@ -110,7 +110,7 @@ const firstGroupLessons = [
 		theme: 'There is / There are (Оборот "есть", "имеется", "находится")',
 		homework: 'Write the words in the chart. – Впишите слова в таблицу.',
 		description: '',
-		students: [1, 2, 4],
+		//students: [1, 2, 4],
 	},
 	{
 		id: 6,
@@ -119,7 +119,7 @@ const firstGroupLessons = [
 		homework:
 			'Look at the photos. In pairs, ask and answer the questions. – Посмотрите на фотографии. Отработайте вопросы в парах. (Сначала один задает, другой отвечает, и наоборот).',
 		description: '',
-		students: [1, 2, 4],
+		//students: [1, 2, 4],
 	},
 	{
 		id: 7,
@@ -128,7 +128,7 @@ const firstGroupLessons = [
 		homework:
 			'Fill in the gaps in these sentences (with suitable…) – Заполните пропуски в этих предложениях (с помощью подходящих…)',
 		description: '',
-		students: [1, 2, 4],
+		//students: [1, 2, 4],
 	},
 	{
 		id: 8,
@@ -138,7 +138,7 @@ const firstGroupLessons = [
 		homework:
 			'Choose a word from the box below to match each definition. – Для каждого определения выберите подходящее слово из рамки, представленной ниже.',
 		description: '',
-		students: [1, 2, 4],
+		//students: [1, 2, 4],
 	},
 	{
 		id: 9,
@@ -148,7 +148,7 @@ const firstGroupLessons = [
 			'Find a word in the diagram above that fits each definition. – Для каждого определения найдите подходящее слово в диаграмме, представленной выше.',
 
 		description: '',
-		students: [1, 2, 4],
+		//students: [1, 2, 4],
 	},
 	{
 		id: 10,
@@ -156,7 +156,7 @@ const firstGroupLessons = [
 		theme: 'Future Simple (Будущее простое время)',
 		homework: 'Describe… - Опишите…',
 		description: '',
-		students: [1, 2, 3],
+		//students: [1, 2, 3],
 	},
 	{
 		id: 11,
@@ -164,7 +164,284 @@ const firstGroupLessons = [
 		theme: 'To be in the Future (Глагол "быть" в будущем)',
 		homework: '',
 		description: '',
-		students: [1, 2, 3],
+		//students: [1, 2, 3],
+	},
+]
+const lessonsData = [
+	//lesson 1 (students 1,2,4)
+	{
+		id: 1,
+		lessonId: 1,
+		studentId: 1,
+		attendance: AttendanceEnum.EXIST,
+		homework: HomeworkEnum.NOT_DONE,
+		description: '',
+	},
+	{
+		id: 2,
+		lessonId: 1,
+		studentId: 2,
+		attendance: AttendanceEnum.EXIST,
+		homework: HomeworkEnum.NOT_DONE,
+		description: '',
+	},
+	{
+		id: 3,
+		lessonId: 1,
+		studentId: 4,
+		attendance: AttendanceEnum.EXIST,
+		homework: HomeworkEnum.NOT_DONE,
+		description: '',
+	},
+	//lesson 2 (students 1,2,4)
+	{
+		id: 4,
+		lessonId: 2,
+		studentId: 1,
+		attendance: AttendanceEnum.EXIST,
+		homework: HomeworkEnum.NOT_DONE,
+		description: '',
+	},
+	{
+		id: 5,
+		lessonId: 2,
+		studentId: 2,
+		attendance: AttendanceEnum.EXIST,
+		homework: HomeworkEnum.NOT_DONE,
+		description: '',
+	},
+	{
+		id: 6,
+		lessonId: 2,
+		studentId: 4,
+		attendance: AttendanceEnum.EXIST,
+		homework: HomeworkEnum.NOT_DONE,
+		description: '',
+	},
+	//lesson 3 (students 1,2,4)
+	{
+		id: 7,
+		lessonId: 3,
+		studentId: 1,
+		attendance: AttendanceEnum.EXIST,
+		homework: HomeworkEnum.NOT_DONE,
+		description: '',
+	},
+	{
+		id: 8,
+		lessonId: 3,
+		studentId: 2,
+		attendance: AttendanceEnum.EXIST,
+		homework: HomeworkEnum.NOT_DONE,
+		description: '',
+	},
+	{
+		id: 9,
+		lessonId: 3,
+		studentId: 4,
+		attendance: AttendanceEnum.EXIST,
+		homework: HomeworkEnum.NOT_DONE,
+		description: '',
+	},
+	//lesson 4 (students 1,2,4)
+	{
+		id: 10,
+		lessonId: 4,
+		studentId: 1,
+		attendance: AttendanceEnum.EXIST,
+		homework: HomeworkEnum.NOT_DONE,
+		description: '',
+	},
+	{
+		id: 11,
+		lessonId: 4,
+		studentId: 2,
+		attendance: AttendanceEnum.EXIST,
+		homework: HomeworkEnum.NOT_DONE,
+		description: '',
+	},
+	{
+		id: 12,
+		lessonId: 4,
+		studentId: 4,
+		attendance: AttendanceEnum.EXIST,
+		homework: HomeworkEnum.NOT_DONE,
+		description: '',
+	},
+	//lesson 5 (students 1,2,4)
+	{
+		id: 13,
+		lessonId: 5,
+		studentId: 1,
+		attendance: AttendanceEnum.EXIST,
+		homework: HomeworkEnum.NOT_DONE,
+		description: '',
+	},
+	{
+		id: 14,
+		lessonId: 5,
+		studentId: 2,
+		attendance: AttendanceEnum.EXIST,
+		homework: HomeworkEnum.NOT_DONE,
+		description: '',
+	},
+	{
+		id: 15,
+		lessonId: 5,
+		studentId: 4,
+		attendance: AttendanceEnum.EXIST,
+		homework: HomeworkEnum.NOT_DONE,
+		description: '',
+	},
+	//lesson 6 (students 1,2,4)
+	{
+		id: 16,
+		lessonId: 6,
+		studentId: 1,
+		attendance: AttendanceEnum.EXIST,
+		homework: HomeworkEnum.NOT_DONE,
+		description: '',
+	},
+	{
+		id: 17,
+		lessonId: 6,
+		studentId: 2,
+		attendance: AttendanceEnum.EXIST,
+		homework: HomeworkEnum.NOT_DONE,
+		description: '',
+	},
+	{
+		id: 18,
+		lessonId: 6,
+		studentId: 4,
+		attendance: AttendanceEnum.EXIST,
+		homework: HomeworkEnum.NOT_DONE,
+		description: '',
+	},
+	//lesson 7 (students 1,2,4)
+	{
+		id: 19,
+		lessonId: 7,
+		studentId: 1,
+		attendance: AttendanceEnum.EXIST,
+		homework: HomeworkEnum.NOT_DONE,
+		description: '',
+	},
+	{
+		id: 20,
+		lessonId: 7,
+		studentId: 2,
+		attendance: AttendanceEnum.EXIST,
+		homework: HomeworkEnum.NOT_DONE,
+		description: '',
+	},
+	{
+		id: 21,
+		lessonId: 7,
+		studentId: 4,
+		attendance: AttendanceEnum.EXIST,
+		homework: HomeworkEnum.NOT_DONE,
+		description: '',
+	},
+	//lesson 8 (students 1,2,4)
+	{
+		id: 22,
+		lessonId: 8,
+		studentId: 1,
+		attendance: AttendanceEnum.EXIST,
+		homework: HomeworkEnum.NOT_DONE,
+		description: '',
+	},
+	{
+		id: 23,
+		lessonId: 8,
+		studentId: 2,
+		attendance: AttendanceEnum.EXIST,
+		homework: HomeworkEnum.NOT_DONE,
+		description: '',
+	},
+	{
+		id: 24,
+		lessonId: 8,
+		studentId: 4,
+		attendance: AttendanceEnum.EXIST,
+		homework: HomeworkEnum.NOT_DONE,
+		description: '',
+	},
+	//lesson 9 (students 1,2,4)
+	{
+		id: 25,
+		lessonId: 9,
+		studentId: 1,
+		attendance: AttendanceEnum.EXIST,
+		homework: HomeworkEnum.NOT_DONE,
+		description: '',
+	},
+	{
+		id: 26,
+		lessonId: 9,
+		studentId: 2,
+		attendance: AttendanceEnum.EXIST,
+		homework: HomeworkEnum.NOT_DONE,
+		description: '',
+	},
+	{
+		id: 27,
+		lessonId: 9,
+		studentId: 4,
+		attendance: AttendanceEnum.EXIST,
+		homework: HomeworkEnum.NOT_DONE,
+		description: '',
+	},
+	//lesson 10 (students 1,2,3)
+	{
+		id: 28,
+		lessonId: 10,
+		studentId: 1,
+		attendance: AttendanceEnum.EXIST,
+		homework: HomeworkEnum.NOT_DONE,
+		description: '',
+	},
+	{
+		id: 29,
+		lessonId: 10,
+		studentId: 2,
+		attendance: AttendanceEnum.EXIST,
+		homework: HomeworkEnum.NOT_DONE,
+		description: '',
+	},
+	{
+		id: 30,
+		lessonId: 10,
+		studentId: 3,
+		attendance: AttendanceEnum.EXIST,
+		homework: HomeworkEnum.NOT_DONE,
+		description: '',
+	},
+	//lesson 11 (students 1,2,3)
+	{
+		id: 31,
+		lessonId: 11,
+		studentId: 1,
+		attendance: AttendanceEnum.EXIST,
+		homework: HomeworkEnum.NOT_DONE,
+		description: '',
+	},
+	{
+		id: 32,
+		lessonId: 11,
+		studentId: 2,
+		attendance: AttendanceEnum.EXIST,
+		homework: HomeworkEnum.NOT_DONE,
+		description: '',
+	},
+	{
+		id: 33,
+		lessonId: 11,
+		studentId: 3,
+		attendance: AttendanceEnum.EXIST,
+		homework: HomeworkEnum.NOT_DONE,
+		description: '',
 	},
 ]
 
@@ -188,6 +465,11 @@ export function makeServer({ environment = 'development' } = {}) {
 			}),
 			lesson: Model.extend({
 				group: belongsTo(),
+				data: hasMany('lesson_item'),
+			}),
+			lesson_item: Model.extend({
+				lesson: belongsTo(),
+				student: belongsTo(),
 			}),
 		},
 		seeds(server) {
@@ -197,9 +479,11 @@ export function makeServer({ environment = 'development' } = {}) {
 			firstGroupLessons.forEach((el) => {
 				server.create('lesson', { ...el, groupId: 1 })
 			})
-			//debugger
 			studentList.forEach((el) => {
 				server.create('student', el)
+			})
+			lessonsData.forEach((el) => {
+				server.create('lesson_item', el)
 			})
 		},
 		routes() {
@@ -294,8 +578,6 @@ export function makeServer({ environment = 'development' } = {}) {
 					.sort((a, b) => {
 						return a.date - b.date
 					})
-				const lessons_jsons = this.serialize(lessons, 'lesson')
-				json.lessons = lessons_jsons
 				return json
 			})
 			//create group
@@ -339,14 +621,73 @@ export function makeServer({ environment = 'development' } = {}) {
 			})
 
 			//LESSONS
+
+			//view group/student lessons
+			this.get('/lessons', function (schema, request) {
+				var lessons = schema.lessons.all()
+				if (request.queryParams['filter[group]']) {
+					lessons = schema.lessons.where({
+						groupId: request.queryParams['filter[group]'],
+					})
+				} else if (request.queryParams['filter[student]']) {
+					const lessonsId = schema.db.lessonItems
+						.where({ studentId: request.queryParams['filter[student]'] })
+						.map((item) => item.lessonId)
+					lessons = schema.lessons.find(lessonsId)
+				}
+				lessons = lessons.sort((a, b) => {
+					return a.date - b.date
+				})
+
+				var lessons_jsons = this.serialize(lessons, 'lesson')
+				//Collect all students associated with this lesson
+				//parse all lesson_data of lesson and get studentId to array
+				lessons_jsons.forEach((l) => {
+					const items = schema.db.lessonItems.where({ lessonId: l.id })
+					l.students = items.map((i) => {
+						return i.studentId
+					})
+					l.group_id = String(l.group)
+					delete l.group
+				})
+
+				return lessons_jsons
+			})
+
+			//get lesson items
+			this.get('/lessons/items', function (schema, request) {
+				var lessonItems = []
+
+				if (request.queryParams['filter[lesson]']) {
+					lessonItems = schema.lessonItems.where({
+						lessonId: request.queryParams['filter[lesson]'],
+					})
+				} else if (request.queryParams['filter[student]']) {
+					lessonItems = schema.lessonItems.where({
+						studentId: request.queryParams['filter[student]'],
+					})
+				}
+				lessonItems = lessonItems.sort((a, b) => {
+					return a.lesson.date - b.lesson.date
+				})
+				var lessonItems_jsons = this.serialize(lessonItems, 'lessonItem')
+				lessonItems_jsons.forEach((j) => {
+					j.lesson_id = String(j.lesson)
+					j.student_id = String(j.student)
+					delete j.lesson
+					delete j.student
+				})
+				return lessonItems_jsons
+			})
+
 			//create lesson
-			this.post('/groups/:group_id/lessons', function (schema, request) {
-				var attr = JSON.parse(request.requestBody)
-				var group = schema.groups.find(request.params.group_id)
+			this.post('/lessons', function (schema, request) {
+				const attr = JSON.parse(request.requestBody)
+				const group = schema.groups.find(request.queryParams.group)
 				const students = schema.db.students
 					.where({ groupId: group.id })
-					.map((el) => el.id)
-				var lesson = schema.lessons.create({
+					.map((el) => +el.id)
+				const lesson = schema.lessons.create({
 					...attr,
 					students: students,
 					groupId: group.id,
@@ -357,12 +698,9 @@ export function makeServer({ environment = 'development' } = {}) {
 				return json
 			})
 			//update lesson
-			this.post('/groups/:group_id/lessons/:lesson_id', function (
-				schema,
-				request
-			) {
-				var attr = JSON.parse(request.requestBody)
-				var lesson = schema.lessons.find(request.params.lesson_id)
+			this.post('/lessons/:id', function (schema, request) {
+				const attr = JSON.parse(request.requestBody)
+				var lesson = schema.lessons.find(request.params.id)
 				//lesson have unique id
 				lesson.update('theme', attr.theme)
 				lesson.update('date', attr.date)
@@ -423,6 +761,16 @@ export function makeServer({ environment = 'development' } = {}) {
 			}),
 			lesson: ApplicationSerializer.extend({
 				attr: ['id', 'date', 'theme', 'homework', 'description', 'students'],
+			}),
+			lessonItem: ApplicationSerializer.extend({
+				attr: [
+					'id',
+					'lesson',
+					'student',
+					'attendance',
+					'homework',
+					'description',
+				],
 			}),
 			/*
 			export default Serializer.extend({

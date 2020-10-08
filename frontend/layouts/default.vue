@@ -1,10 +1,9 @@
 <template lang="pug">
 div
 	Navbar
-	.wrapper
+	main
 		.container
-			main
-				nuxt
+			nuxt
 
 </template>
 

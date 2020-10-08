@@ -139,3 +139,16 @@ section,
 .no-border {
 	border: 0;
 }
+
+//for small device, for fixed navbar
+.container,
+.container-fluid {
+	padding-top: 25px;
+}
+//for big device, for fixed navbar
+@include media-breakpoint-up(md) {
+	.container,
+	.container-fluid {
+		padding-top: 31px;
+	}
+}

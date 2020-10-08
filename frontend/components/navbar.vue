@@ -1,6 +1,6 @@
 <template lang="pug">
 div.shadow
-  b-navbar(toggleable='lg', type='light', variant='light')
+  b-navbar(toggleable='lg', type='light', variant='light' fixed='top')
     b-navbar-brand(href='#') NavBar
     b-navbar-toggle(target='nav-collapse')
     b-collapse#nav-collapse(is-nav='')

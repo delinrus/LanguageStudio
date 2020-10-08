@@ -9,7 +9,6 @@ export default class Group {
 			this.students = []
 			this.is_individual = false
 			this.student_count = 0
-			this.lessons = []
 			return
 		}
 		this.id = obj.id
@@ -24,14 +23,6 @@ export default class Group {
 			this.students = studentList
 		} else {
 			this.students = []
-		}
-		if (obj.lessons) {
-			const lessons = obj.lessons.map(function (el) {
-				return new Lesson({ ...el })
-			})
-			this.lessons = lessons
-		} else {
-			this.lessons = []
 		}
 	}
 

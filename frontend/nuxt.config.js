@@ -1,7 +1,8 @@
 import pkg from './package'
 
 export default {
-	mode: 'spa', //for mirage need spa. If need universal, then => mode: process.env.NODE_ENV === 'development' ? 'spa' : 'universal'
+	ssr: false, //Please use ssr: true for universal mode or ssr: false for spa mode
+	//for mirage need spa. If need universal, then => mode: process.env.NODE_ENV === 'development' ? false : true
 
 	generate: {
 		dir: 'target/dist',

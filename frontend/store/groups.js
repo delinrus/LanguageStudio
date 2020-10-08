@@ -20,16 +20,6 @@ export const mutations = {
 			state.groups.push(group)
 		}
 	},
-	updateLessonOfGroup(state, { id, lesson }) {
-		var group = state.groups.find((g) => g.id === id)
-
-		const lesson_index = group.lessons.findIndex((l) => l.id === id)
-		if (lesson_index >= 0) {
-			group.lessons.splice(lesson_index, 1, lesson)
-		} else {
-			group.lessons.push(lesson)
-		}
-	},
 }
 
 export const actions = {
@@ -80,7 +70,7 @@ export const actions = {
 			//refresh student list (students will be excluded from group)
 			const deleted_group_students = getters.groupById(id).student_count
 			commit('updateGroup', { id, group: null })
-
+			commit('lessons/removeLessons', id)
 			if (deleted_group_students) {
 				await dispatch('students/fetchAll', null, { root: true })
 			}
@@ -117,7 +107,8 @@ export const getters = {
 	groups: (s) => s.groups,
 	groupById: (state) =>
 		function (id) {
+			if (!id) return new Group()
 			const list = state.groups.filter((el) => el.id === id)
-			return list.length ? list[0] : null
+			return list.length ? list[0] : new Group()
 		},
 }

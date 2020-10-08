@@ -9,7 +9,7 @@
 					active-class="active"
 					:to="l.path"
 					)
-					i.h4.material-icons.align-baseline.mr-2.align-top(style="font-size:1.3rem;") {{l.icon}}
+					i.h4.material-icons.align-baseline.mr-2.mb-0.align-top(style="font-size:1.3rem;") {{l.icon}}
 					span.hide_on_small_inline {{l.title}}
 </template>
 
@@ -57,6 +57,11 @@ export default {
 		}
 	}
 }
+.sidebar-header {
+	position: fixed;
+	min-width: 60px;
+	padding-top: 50px;
+}
 
 @include media-breakpoint-up(md) {
 	#sidebar {
@@ -64,6 +69,7 @@ export default {
 		max-width: 250px;
 		min-height: 100vh;
 		background: var(--dark);
+
 		ul {
 			li {
 				a {
@@ -79,6 +85,11 @@ export default {
 				}
 			}
 		}
+	}
+	.sidebar-header {
+		position: fixed;
+		min-width: 250px;
+		padding-top: 63px;
 	}
 }
 </style>

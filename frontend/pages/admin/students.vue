@@ -50,6 +50,7 @@
 <script>
 import ModalForm_StudentInfo from '~/components/Students_StudentInfo'
 import Loader from '~/components/Loader'
+import { mapGetters } from 'vuex'
 export default {
 	layout: 'private_area',
 	components: { ModalForm_StudentInfo, Loader },
@@ -59,9 +60,9 @@ export default {
 		currentSortMethod: 'name',
 		currentSortMethodDown: true,
 		searchString: '',
-		students: [],
 	}),
 	computed: {
+		...mapGetters('students', ['students']),
 		filteredStudents: function () {
 			if (this.students === null) return []
 			//if any property has searchString
@@ -117,7 +118,6 @@ export default {
 		},
 		async refreshList() {
 			await this.$store.dispatch('students/fetchAll')
-			this.students = this.$store.getters['students/students']
 			this.sort('name')
 		},
 	},
