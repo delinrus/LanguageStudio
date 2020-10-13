@@ -6,12 +6,11 @@ import org.junit.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import studio.okey.to.StudentTo;
+import studio.okey.to.StudentShortTo;
 
 import java.util.List;
 
 import static org.springframework.test.util.AssertionErrors.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static studio.okey.controller.StudentTestData.*;
@@ -19,22 +18,22 @@ import static studio.okey.controller.StudentTestData.*;
 
 public class StudentControllerTests extends AbstractControllerTest {
     private ObjectMapper mapper = new ObjectMapper();
-    private TypeReference<List<StudentTo>> typeReference = new TypeReference<List<StudentTo>>() {
+    private TypeReference<List<StudentShortTo>> typeReference = new TypeReference<List<StudentShortTo>>() {
     };
 
     private static final String REST_URL = StudentController.REST_URL + '/';
 
     @Test
     public void getAll() throws Exception {
-        ResultActions resultActions = mockMvc.perform(get("/students")
+        ResultActions resultActions = perform(MockMvcRequestBuilders.get("/students")
                 .accept(MediaType.APPLICATION_JSON_UTF8))
                 .andDo(print())
                 .andExpect(status().isOk());
 
 
         String contentAsString = resultActions.andReturn().getResponse().getContentAsString();
-        List<StudentTo> actual = mapper.readValue(contentAsString, typeReference);
-        assertEquals("Возвращается не правильный результат при запросе GET /students.", ALL_STUDENTS, actual);
+        List<StudentShortTo> actual = mapper.readValue(contentAsString, typeReference);
+        assertEquals("Возвращается неправильный результат при запросе GET /students.", ALL_STUDENTS, actual);
     }
 
     @Test
@@ -46,8 +45,22 @@ public class StudentControllerTests extends AbstractControllerTest {
                 .andExpect(status().isCreated());
 
         String contentAsString = action.andReturn().getResponse().getContentAsString();
-        assertEquals("Возвращается не правильный результат при запросе POST /students/{id}.", RESULT_NEW_STUDENT, contentAsString);
+        assertEquals("Возвращается неправильный результат при запросе POST /students/{id}.",
+                RESULT_NEW_STUDENT, contentAsString);
     }
+
+    @Test
+    public void get() throws Exception {
+        ResultActions action = perform(MockMvcRequestBuilders.get("/students" + "/2")
+                .accept(MediaType.APPLICATION_JSON_UTF8))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        String contentAsString = action.andReturn().getResponse().getContentAsString();
+        assertEquals("Возвращается неправильный результат при запросе GET /students/{id}.",
+                RESULT_STUDENT_BY_ID, contentAsString);
+    }
+
 }
 
 

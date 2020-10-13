@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import studio.okey.model.Student;
 import studio.okey.service.StudentService;
+import studio.okey.to.StudentShortTo;
 import studio.okey.to.StudentTo;
 import studio.okey.util.StudentUtil;
 
@@ -25,12 +26,13 @@ public class StudentController {
     }
 
     @GetMapping
-    public List<StudentTo> getAll() {
-        return StudentUtil.getTos(studentService.getList());
+    public List<StudentShortTo> getAll() {
+        return StudentUtil.getShortTos(studentService.getList());
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Student> createWithLocation(@RequestBody Student student) {
+        student.getParents().forEach(parent -> parent.setStudent(student));
         Student created = studentService.save(student);
 
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -40,5 +42,9 @@ public class StudentController {
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
+    @GetMapping("/{id}")
+    public StudentTo get(@PathVariable long id) {
+        return StudentUtil.getTo(studentService.get(id));
+    }
 }
 

@@ -38,4 +38,9 @@ public class StudentServiceImpl implements StudentService {
         student.setLogin(generateLogin(student));
         return studentRepository.save(student);
     }
+
+    @Override
+    public Student get(Long id) {
+        return studentRepository.findById(id).orElse(null);
+    }
 }

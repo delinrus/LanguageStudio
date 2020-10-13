@@ -9,11 +9,12 @@ public class Lesson {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private Date lessonDate;
+    private Date date;
     private String theme;
     private String homework;
+    private String description;
 
     @ManyToOne(optional = false, cascade = CascadeType.ALL)
-    @JoinColumn(name = "group_name")
+    @JoinColumn(name = "group_id")
     private LearningGroup learningGroup;
 }

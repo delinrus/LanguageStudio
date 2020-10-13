@@ -14,6 +14,9 @@ import java.util.Set;
 @Table(name = "learning_group")
 public class LearningGroup {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String name;
 
     private boolean isIndividual;

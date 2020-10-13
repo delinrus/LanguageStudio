@@ -1,12 +1,12 @@
 package studio.okey.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Entity
 @ToString
@@ -17,19 +17,14 @@ import java.util.Set;
 public class Parent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     private String surname;
     private String name;
     private String patronymic;
     private String phone;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name="parent_student",
-            joinColumns=@JoinColumn(name="parent"),
-            inverseJoinColumns=@JoinColumn(name="student"))
-    private Set<Student> students;
-
-    public Set<Student> getStudents() {
-        return students;
-    }
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @JoinColumn(name = "student_id")
+    @JsonIgnore
+    private Student student;
 }

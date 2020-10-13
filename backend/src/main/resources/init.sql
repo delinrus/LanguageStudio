@@ -14,17 +14,18 @@ DROP TABLE IF EXISTS learning_group;
 
 CREATE TABLE learning_group
 (
-    name          VARCHAR(70) NOT NULL,
+    id            BIGINT      NOT NULL AUTO_INCREMENT,
+    name          VARCHAR(20) NULL,
     is_individual BOOLEAN     NULL,
     teacher_id    INT         NULL,
-    PRIMARY KEY (name)
+    PRIMARY KEY (id)
 ) ENGINE = INNODB
   CHARACTER SET utf8;
 
 CREATE TABLE student
 (
     id         BIGINT       NOT NULL AUTO_INCREMENT,
-    group_name VARCHAR(70)  NULL,
+    group_id   BIGINT       NULL,
     surname    VARCHAR(20)  NULL,
     name       VARCHAR(20)  NULL,
     patronymic VARCHAR(20)  NULL,
@@ -32,8 +33,8 @@ CREATE TABLE student
     address    VARCHAR(100) NULL,
     login      VARCHAR(25)  NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (group_name)
-        REFERENCES learning_group (name)
+    FOREIGN KEY (group_id)
+        REFERENCES learning_group (id)
         ON DELETE SET NULL
 ) ENGINE = INNODB
   CHARACTER SET utf8;
@@ -41,13 +42,14 @@ CREATE TABLE student
 CREATE TABLE lesson
 (
     id          BIGINT       NOT NULL AUTO_INCREMENT,
-    group_name  VARCHAR(70)  NOT NULL,
-    lesson_date DATE         NULL,
+    group_id    BIGINT       NOT NULL,
+    date        DATE         NULL,
     theme       VARCHAR(200) NULL,
     homework    VARCHAR(500) NULL,
+    description VARCHAR(500) NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (group_name)
-        REFERENCES learning_group (name)
+    FOREIGN KEY (group_id)
+        REFERENCES learning_group (id)
         ON DELETE CASCADE
 ) ENGINE = INNODB
   CHARACTER SET utf8;
@@ -73,50 +75,35 @@ CREATE TABLE lesson_data
 CREATE TABLE parent
 (
     id         BIGINT      NOT NULL AUTO_INCREMENT,
+    student_id BIGINT      NOT NULL,
     surname    VARCHAR(20) NULL,
     name       VARCHAR(20) NULL,
     patronymic VARCHAR(20) NULL,
     phone      VARCHAR(20) NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    FOREIGN KEY (student_id)
+        REFERENCES student (id)
+        ON DELETE CASCADE
 ) ENGINE = INNODB
   CHARACTER SET utf8;
 
-CREATE TABLE parent_student
-(
-    parent  BIGINT NOT NULL,
-    student BIGINT NOT NULL,
-    PRIMARY KEY (student, parent),
+insert into learning_group(id, name, is_individual, teacher_id)
+values (1, 'Группа понедельника', true, null),
+       (2, 'Группа вторника', false, null);
 
-    CONSTRAINT constr_parent_student_parent_fk
-        FOREIGN KEY parent_fk (parent) REFERENCES parent (id)
-            ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT constr_parent_student_student_fk
-        FOREIGN KEY student_fk (student) REFERENCES student (id)
-            ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = INNODB
-  CHARACTER SET utf8;
-
-insert into learning_group(name, is_individual, teacher_id)
-values ('Группа понедельника', true, null),
-       ('Группа вторника', false, null);
-
-insert into student(id, group_name, surname, name, patronymic, phone, login)
+insert into student(id, group_id, surname, name, patronymic, phone, login)
 values (1, Null, 'Назаренко', 'Виктория', 'Сергеевна', '8-935-552-46-78', 'nazarenko.vs'),
-       (2, 'Группа понедельника', 'Иванов', 'Василий', 'Генадиевич', '8-935-532-83-98', 'ivanov.vg'),
-       (3, 'Группа понедельника', 'Ветрова', 'Валентина', 'Федоровна', '8-935-422-83-98', 'vetrova.vf'),
-       (4, 'Группа вторника', 'Мурдашева', 'Антонина', 'Артемовна', '8-911-446-11-12', 'murdasheva.aa');
+       (2, 1, 'Иванов', 'Василий', 'Генадиевич', '8-935-532-83-98', 'ivanov.vg'),
+       (3, 1, 'Ветрова', 'Валентина', 'Федоровна', '8-935-422-83-98', 'vetrova.vf'),
+       (4, 2, 'Мурдашева', 'Антонина', 'Артемовна', '8-911-446-11-12', 'murdasheva.aa');
 
-insert into lesson(id, group_name, lesson_date, theme, homework)
-values (1, 'Группа понедельника', '2020-06-04', 'Деепричастия', 'повтор');
+insert into lesson(id, group_id, date, theme, homework, description)
+values (1, 1, '2020-06-04', 'Деепричастия', 'повтор', 'Вставить пропущенные слова');
 
 insert into lesson_data(lesson_id, student_id, attendance, homework, description)
 values (1, 2, 'NOT_EXIST', 'NOT_DONE', 'Страница 24, упр. 15'),
        (1, 3, 'EXIST_LATE', 'DONE', 'Страница 24, упр. 15');
 
-insert into parent(id, surname, name, patronymic, phone)
-values (1, 'Иванов', 'Генадий', 'Васильевич', '8-363-733-12-67'),
-       (2, 'Мурдашев', 'Артем', 'Михайлович', '8-246-335-67-53');
-
-insert into parent_student(parent, student)
-values (1, 2),
-       (2, 4);
+insert into parent(id, student_id, surname, name, patronymic, phone)
+values (1, 2, 'Иванов', 'Генадий', 'Васильевич', '8-363-733-12-67'),
+       (2, 4, 'Мурдашев', 'Артем', 'Михайлович', '8-246-335-67-53');

@@ -29,17 +29,10 @@ public class Student {
     @Column(unique = true)
     private String login;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "parent_student",
-            joinColumns = @JoinColumn(name = "student"),
-            inverseJoinColumns = @JoinColumn(name = "parent"))
+    @OneToMany(mappedBy = "student", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Parent> parents;
 
     @ManyToOne
-    @JoinColumn(name = "group_name", insertable = false, updatable = false)
+    @JoinColumn(name = "group_id", insertable = false, updatable = false)
     private LearningGroup learningGroup;
-
-    public List<Parent> getParents() {
-        return parents;
-    }
 }
