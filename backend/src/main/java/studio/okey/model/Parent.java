@@ -1,6 +1,8 @@
 package studio.okey.model;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
@@ -10,9 +12,11 @@ import java.util.Set;
 @ToString
 @NoArgsConstructor
 @Table(name = "parent")
+@Getter
+@Setter
 public class Parent {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String surname;
     private String name;

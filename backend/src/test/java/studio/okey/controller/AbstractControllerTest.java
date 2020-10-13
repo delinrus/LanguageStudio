@@ -8,6 +8,8 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -15,7 +17,7 @@ import org.springframework.web.context.WebApplicationContext;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Sql(scripts = "classpath:init.sql", config = @SqlConfig(encoding = "UTF-8"))
-public abstract class AbstractTest {
+public abstract class AbstractControllerTest {
 
     WebApplicationContext context;
     MockMvc mockMvc;
@@ -28,5 +30,9 @@ public abstract class AbstractTest {
     @Before
     public void setup() {
         mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
+    }
+
+    public ResultActions perform(MockHttpServletRequestBuilder builder) throws Exception {
+        return mockMvc.perform(builder);
     }
 }

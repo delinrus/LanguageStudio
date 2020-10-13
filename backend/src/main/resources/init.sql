@@ -23,12 +23,14 @@ CREATE TABLE learning_group
 
 CREATE TABLE student
 (
-    id         BIGINT      NOT NULL AUTO_INCREMENT,
-    group_name VARCHAR(70) NULL,
-    surname    VARCHAR(20) NULL,
-    name       VARCHAR(20) NULL,
-    patronymic VARCHAR(20) NULL,
-    phone      VARCHAR(20) NULL,
+    id         BIGINT       NOT NULL AUTO_INCREMENT,
+    group_name VARCHAR(70)  NULL,
+    surname    VARCHAR(20)  NULL,
+    name       VARCHAR(20)  NULL,
+    patronymic VARCHAR(20)  NULL,
+    phone      VARCHAR(20)  NULL,
+    address    VARCHAR(100) NULL,
+    login      VARCHAR(25)  NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (group_name)
         REFERENCES learning_group (name)
@@ -98,11 +100,11 @@ insert into learning_group(name, is_individual, teacher_id)
 values ('Группа понедельника', true, null),
        ('Группа вторника', false, null);
 
-insert into student(id, group_name, surname, name, patronymic, phone)
-values (1, Null, 'Хренова', 'Гадя', 'Петрович', '8-935-552-46-78'),
-       (2, 'Группа понедельника', 'Иванов', 'Василий', 'Генадиевич', '8-935-532-83-98'),
-       (3, 'Группа понедельника', 'Ветрова', 'Валентина', 'Федоровна', '8-935-422-83-98'),
-       (4, 'Группа вторника', 'Мурдашева', 'Антонина', 'Артемовна', '8-911-446-11-12');
+insert into student(id, group_name, surname, name, patronymic, phone, login)
+values (1, Null, 'Назаренко', 'Виктория', 'Сергеевна', '8-935-552-46-78', 'nazarenko.vs'),
+       (2, 'Группа понедельника', 'Иванов', 'Василий', 'Генадиевич', '8-935-532-83-98', 'ivanov.vg'),
+       (3, 'Группа понедельника', 'Ветрова', 'Валентина', 'Федоровна', '8-935-422-83-98', 'vetrova.vf'),
+       (4, 'Группа вторника', 'Мурдашева', 'Антонина', 'Артемовна', '8-911-446-11-12', 'murdasheva.aa');
 
 insert into lesson(id, group_name, lesson_date, theme, homework)
 values (1, 'Группа понедельника', '2020-06-04', 'Деепричастия', 'повтор');

@@ -7,6 +7,8 @@ import studio.okey.repository.StudentRepository;
 
 import java.util.List;
 
+import static studio.okey.util.StudentUtil.generateLogin;
+
 @Service
 public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
@@ -29,5 +31,11 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public void delete(Long id) {
         studentRepository.deleteById(id);
+    }
+
+    @Override
+    public Student save(Student student) {
+        student.setLogin(generateLogin(student));
+        return studentRepository.save(student);
     }
 }
