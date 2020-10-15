@@ -1,6 +1,6 @@
 package studio.okey.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,6 +25,6 @@ public class Parent {
 
     @ManyToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "student_id")
-    @JsonIgnore
+    @JsonBackReference
     private Student student;
 }
