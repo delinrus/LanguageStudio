@@ -8,6 +8,7 @@ import studio.okey.repository.StudentRepository;
 import java.util.List;
 
 import static studio.okey.util.StudentUtil.generateLogin;
+import static studio.okey.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -29,8 +30,9 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public void delete(Long id) {
-        studentRepository.deleteById(id);
+    public void delete(long id) {
+        boolean result = studentRepository.delete(id) != 0;
+        checkNotFoundWithId(result, id);
     }
 
     @Override
@@ -40,7 +42,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Student get(Long id) {
-        return studentRepository.findById(id).orElse(null);
+    public Student get(long id) {
+        return checkNotFoundWithId(studentRepository.findById(id).orElse(null), id);
     }
 }

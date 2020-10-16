@@ -9,9 +9,9 @@ public interface StudentService {
 
     List<Student> getList();
 
-    void delete(Long id);
+    void delete(long id);
 
     Student save(Student student);
 
-    Student get(Long id);
+    Student get(long id);
 }

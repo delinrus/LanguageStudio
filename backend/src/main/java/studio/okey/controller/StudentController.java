@@ -1,6 +1,7 @@
 package studio.okey.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -45,6 +46,12 @@ public class StudentController {
     @GetMapping("/{id}")
     public StudentTo get(@PathVariable long id) {
         return StudentUtil.getTo(studentService.get(id));
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable long id) {
+        studentService.delete(id);
     }
 }
 

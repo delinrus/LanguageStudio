@@ -25,7 +25,7 @@ public class StudentControllerTests extends AbstractControllerTest {
 
     @Test
     public void getAll() throws Exception {
-        ResultActions resultActions = perform(MockMvcRequestBuilders.get("/students")
+        ResultActions resultActions = perform(MockMvcRequestBuilders.get(REST_URL)
                 .accept(MediaType.APPLICATION_JSON_UTF8))
                 .andDo(print())
                 .andExpect(status().isOk());
@@ -51,7 +51,7 @@ public class StudentControllerTests extends AbstractControllerTest {
 
     @Test
     public void get() throws Exception {
-        ResultActions action = perform(MockMvcRequestBuilders.get("/students" + "/2")
+        ResultActions action = perform(MockMvcRequestBuilders.get(REST_URL + STUDENT_INDEX)
                 .accept(MediaType.APPLICATION_JSON_UTF8))
                 .andDo(print())
                 .andExpect(status().isOk());
@@ -59,6 +59,32 @@ public class StudentControllerTests extends AbstractControllerTest {
         String contentAsString = action.andReturn().getResponse().getContentAsString();
         assertEquals("Возвращается неправильный результат при запросе GET /students/{id}.",
                 RESULT_STUDENT_BY_ID, contentAsString);
+    }
+
+    @Test
+    public void getNotFound() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + STUDENT_NON_EXISTING_INDEX))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void delete() throws Exception {
+        perform(MockMvcRequestBuilders.delete(REST_URL + STUDENT_INDEX))
+                .andDo(print())
+                .andExpect(status().isNoContent());
+
+        ResultActions action = perform(MockMvcRequestBuilders.get(REST_URL + STUDENT_INDEX)
+                .accept(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void deleteNotFound() throws Exception {
+        perform(MockMvcRequestBuilders.delete(REST_URL + STUDENT_NON_EXISTING_INDEX))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+
     }
 
 }

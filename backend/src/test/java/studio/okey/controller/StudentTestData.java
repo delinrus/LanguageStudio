@@ -70,6 +70,10 @@ public class StudentTestData {
 
     public static final List<StudentShortTo> ALL_STUDENTS = new ArrayList<>();
 
+    public static final Long STUDENT_INDEX = 2L;
+
+    public static final Long STUDENT_NON_EXISTING_INDEX = 1000001L;
+
     static {
         ALL_STUDENTS.add(new StudentShortTo(1L, "Назаренко", "Виктория", "Сергеевна", null));
         ALL_STUDENTS.add(new StudentShortTo(2L, "Иванов", "Василий", "Генадиевич",
