@@ -87,6 +87,33 @@ public class StudentControllerTests extends AbstractControllerTest {
 
     }
 
+
+    @Test
+    public void update() throws Exception {
+        perform(MockMvcRequestBuilders.put(REST_URL + STUDENT_INDEX)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(UPDATED_STUDENT))
+                .andDo(print())
+                .andExpect(status().isNoContent());
+
+
+        ResultActions action = perform(MockMvcRequestBuilders.get(REST_URL + STUDENT_INDEX)
+                .accept(MediaType.APPLICATION_JSON_UTF8))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        String contentAsString = action.andReturn().getResponse().getContentAsString();
+        assertEquals("", UPDATED_STUDENT_RESULT, contentAsString);
+    }
+
+    @Test
+    public void updateNotFound() throws Exception {
+        perform(MockMvcRequestBuilders.put(REST_URL + STUDENT_NON_EXISTING_INDEX)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(UPDATED_STUDENT))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
 }
 
 

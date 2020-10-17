@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -16,10 +18,8 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "student")
-public class Student {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Student extends AbstractBaseEntity  {
+
     private String surname;
     private String name;
     private String patronymic;
@@ -30,11 +30,11 @@ public class Student {
     @Column(unique = true)
     private String login;
 
-    @OneToMany(mappedBy = "student", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "student", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Parent> parents;
 
-    @ManyToOne
-    @JoinColumn(name = "group_id", insertable = false, updatable = false)
-    private LearningGroup learningGroup;
+    @Column(name="group_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Long learningGroupId;
 }

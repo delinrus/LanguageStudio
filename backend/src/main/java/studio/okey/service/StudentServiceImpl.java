@@ -4,10 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import studio.okey.model.Student;
 import studio.okey.repository.StudentRepository;
+import studio.okey.util.exception.NotFoundException;
 
 import java.util.List;
 
 import static studio.okey.util.StudentUtil.generateLogin;
+import static studio.okey.util.ValidationUtil.assureIdConsistent;
 import static studio.okey.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
@@ -44,5 +46,14 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Student get(long id) {
         return checkNotFoundWithId(studentRepository.findById(id).orElse(null), id);
+    }
+
+    @Override
+    public void update(Student student, long id) {
+        assureIdConsistent(student, id);
+        if (!studentRepository.existsById(id)) {
+            throw new NotFoundException("No entity to update");
+        }
+        studentRepository.save(student);
     }
 }

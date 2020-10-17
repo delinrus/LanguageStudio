@@ -47,7 +47,7 @@ public class StudentTestData {
                     "\"patronymic\":\"Олеговна\"," +
                     "\"phone\":\"8-834-437-24-11\"}" +
                     "]," +
-                    "\"learningGroup\":null}";
+                    "\"learningGroupId\":null}";
 
     public static final String RESULT_STUDENT_BY_ID =
             "{\"id\":2," +
@@ -67,6 +67,41 @@ public class StudentTestData {
                     "{\"name\":\"Группа понедельника\"," +
                     "\"studentCount\":2," +
                     "\"isIndividual\":false}}";
+
+
+    public static final String UPDATED_STUDENT =
+            "{" +
+                    "\"name\": \"Петр\"," +
+                    "\"patronymic\":\"Георгиевич\"," +
+                    "\"surname\": \"Протасов\"," +
+                    "\"phone\" : \"8-834-123-33-51\"," +
+                    "\"address\": \"Ленина 12, кв. 53\"," +
+                    "\"parents\":[" +
+                    "{\"name\": \"Валерия\"," +
+                    "\"patronymic\":\"Игоревна\"," +
+                    "\"surname\": \"Протасова\"," +
+                    "\"phone\" : \"8-332-532-15-01\"}]," +
+                    "\"login\": \"newLogin\"," +
+                    "\"learningGroupId\" : \"1\"" +
+                    "}";
+
+
+    public static final String UPDATED_STUDENT_RESULT =
+            "{" +
+                    "\"id\":2," +
+                    "\"surname\":\"Протасов\"," +
+                    "\"name\":\"Петр\"," +
+                    "\"patronymic\":\"Георгиевич\"," +
+                    "\"phone\":\"8-834-123-33-51\"," +
+                    "\"address\":\"Ленина 12, кв. 53\"," +
+                    "\"login\":\"newLogin\"," +
+                    "\"parents\":[" +
+                    "{\"id\":3," +
+                    "\"surname\":\"Протасова\"," +
+                    "\"name\":\"Валерия\"," +
+                    "\"patronymic\":\"Игоревна\"," +
+                    "\"phone\":\"8-332-532-15-01\"}]," +
+                    "\"group\":{\"name\":\"Группа понедельника\",\"studentCount\":2,\"isIndividual\":false}}";
 
     public static final List<StudentShortTo> ALL_STUDENTS = new ArrayList<>();
 

@@ -53,5 +53,14 @@ public class StudentController {
     public void delete(@PathVariable long id) {
         studentService.delete(id);
     }
+
+    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void update(@RequestBody Student student, @PathVariable long id) {
+        studentService.update(student, id);
+    }
+
+
+
 }
 

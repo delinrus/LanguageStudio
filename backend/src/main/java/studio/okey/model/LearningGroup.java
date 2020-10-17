@@ -26,6 +26,6 @@ public class LearningGroup {
     @OneToMany(mappedBy = "learningGroup", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Lesson> Lessons;
 
-    @OneToMany(mappedBy = "learningGroup", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "learningGroupId", fetch = FetchType.EAGER)
     private Set<Student> students;
 }
