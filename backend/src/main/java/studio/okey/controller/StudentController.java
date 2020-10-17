@@ -19,7 +19,7 @@ import java.util.List;
 @RequestMapping(value = StudentController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class StudentController {
     private final StudentService studentService;
-    static final String REST_URL = "/students";
+    public static final String REST_URL = "/students";
 
     @Autowired
     public StudentController(StudentService studentService) {

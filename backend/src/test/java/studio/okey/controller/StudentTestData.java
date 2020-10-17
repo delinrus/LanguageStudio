@@ -66,7 +66,7 @@ public class StudentTestData {
                     "\"group\":" +
                     "{\"name\":\"Группа понедельника\"," +
                     "\"studentCount\":2," +
-                    "\"isIndividual\":false}}";
+                    "\"isIndividual\":true}}";
 
 
     public static final String UPDATED_STUDENT =
@@ -101,7 +101,7 @@ public class StudentTestData {
                     "\"name\":\"Валерия\"," +
                     "\"patronymic\":\"Игоревна\"," +
                     "\"phone\":\"8-332-532-15-01\"}]," +
-                    "\"group\":{\"name\":\"Группа понедельника\",\"studentCount\":2,\"isIndividual\":false}}";
+                    "\"group\":{\"name\":\"Группа понедельника\",\"studentCount\":2,\"isIndividual\":true}}";
 
     public static final List<StudentShortTo> ALL_STUDENTS = new ArrayList<>();
 
@@ -112,9 +112,9 @@ public class StudentTestData {
     static {
         ALL_STUDENTS.add(new StudentShortTo(1L, "Назаренко", "Виктория", "Сергеевна", null));
         ALL_STUDENTS.add(new StudentShortTo(2L, "Иванов", "Василий", "Генадиевич",
-                new GroupTo("Группа понедельника", false, 2)));
+                new GroupTo("Группа понедельника", true, 2)));
         ALL_STUDENTS.add(new StudentShortTo(3L, "Ветрова", "Валентина", "Федоровна",
-                new GroupTo("Группа понедельника", false, 2)));
+                new GroupTo("Группа понедельника", true, 2)));
         ALL_STUDENTS.add(new StudentShortTo(4L, "Мурдашева", "Антонина", "Артемовна",
                 new GroupTo("Группа вторника", false, 1)));
 

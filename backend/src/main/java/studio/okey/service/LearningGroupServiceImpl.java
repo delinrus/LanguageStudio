@@ -4,31 +4,37 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import studio.okey.model.LearningGroup;
 import studio.okey.repository.LearningGroupRepository;
-import studio.okey.repository.StudentRepository;
 
 import java.util.List;
 
+import static studio.okey.util.ValidationUtil.checkNotFoundWithId;
+
 @Service
 public class LearningGroupServiceImpl implements LearningGroupService {
-    private final LearningGroupRepository learningGroupRepository;
+    private final LearningGroupRepository groupRepository;
 
     @Autowired
     public LearningGroupServiceImpl(LearningGroupRepository learningGroupRepository) {
-        this.learningGroupRepository = learningGroupRepository;
+        this.groupRepository = learningGroupRepository;
     }
 
     @Override
     public long count() {
-        return learningGroupRepository.count();
+        return groupRepository.count();
     }
 
     @Override
     public List<LearningGroup> getList() {
-        return learningGroupRepository.findAll();
+        return groupRepository.findAll();
     }
 
     @Override
     public void delete(Long id) {
-        learningGroupRepository.deleteById(id);
+        groupRepository.deleteById(id);
+    }
+
+    @Override
+    public LearningGroup get(long id) {
+        return checkNotFoundWithId(groupRepository.findById(id).orElse(null), id);
     }
 }
