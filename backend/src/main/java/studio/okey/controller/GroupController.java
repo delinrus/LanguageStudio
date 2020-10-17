@@ -1,14 +1,10 @@
 package studio.okey.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import studio.okey.service.LearningGroupService;
 import studio.okey.to.GroupTo;
-import studio.okey.to.StudentTo;
-import studio.okey.util.StudentUtil;
 
 import java.util.List;
 
@@ -33,5 +29,11 @@ public class GroupController {
     @GetMapping("/{id}")
     public GroupTo get(@PathVariable long id) {
         return createTo(groupService.get(id));
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable long id) {
+        groupService.delete(id);
     }
 }

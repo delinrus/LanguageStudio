@@ -16,4 +16,6 @@ public class GroupTestData {
                     "\"isIndividual\":true}";
 
     public static final Long LEARNING_GROUP_INDEX = 1L;
+
+    public static final Long GROUP_NON_EXISTING_INDEX = 1000001L;
 }

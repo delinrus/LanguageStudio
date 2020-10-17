@@ -9,7 +9,6 @@ import static org.springframework.test.util.AssertionErrors.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static studio.okey.controller.GroupTestData.*;
-import static studio.okey.controller.StudentTestData.STUDENT_NON_EXISTING_INDEX;
 
 public class GroupControllerTest extends AbstractControllerTest {
 
@@ -41,8 +40,27 @@ public class GroupControllerTest extends AbstractControllerTest {
 
     @Test
     public void getNotFound() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + STUDENT_NON_EXISTING_INDEX))
+        perform(MockMvcRequestBuilders.get(REST_URL + GROUP_NON_EXISTING_INDEX))
                 .andDo(print())
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void delete() throws Exception {
+        perform(MockMvcRequestBuilders.delete(REST_URL + LEARNING_GROUP_INDEX))
+                .andDo(print())
+                .andExpect(status().isNoContent());
+
+        ResultActions action = perform(MockMvcRequestBuilders.get(REST_URL + LEARNING_GROUP_INDEX)
+                .accept(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void deleteNotFound() throws Exception {
+        perform(MockMvcRequestBuilders.delete(REST_URL + GROUP_NON_EXISTING_INDEX))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+
     }
 }

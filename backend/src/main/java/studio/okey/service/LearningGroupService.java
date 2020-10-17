@@ -1,7 +1,6 @@
 package studio.okey.service;
 
 import studio.okey.model.LearningGroup;
-import studio.okey.to.GroupTo;
 
 import java.util.List;
 
@@ -10,7 +9,7 @@ public interface LearningGroupService {
 
     List<LearningGroup> getList();
 
-    void delete(Long id);
+    void delete(long id);
 
     LearningGroup get(long id);
 }

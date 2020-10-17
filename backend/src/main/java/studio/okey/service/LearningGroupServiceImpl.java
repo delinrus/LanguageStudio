@@ -29,8 +29,9 @@ public class LearningGroupServiceImpl implements LearningGroupService {
     }
 
     @Override
-    public void delete(Long id) {
-        groupRepository.deleteById(id);
+    public void delete(long id) {
+        boolean result = groupRepository.delete(id) != 0;
+        checkNotFoundWithId(result, id);
     }
 
     @Override
