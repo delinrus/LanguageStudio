@@ -63,4 +63,18 @@ public class GroupControllerTest extends AbstractControllerTest {
                 .andExpect(status().isNotFound());
 
     }
+
+    @Test
+    public void createWithLocation() throws Exception {
+        ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(NEW_GROUP))
+                .andDo(print())
+                .andExpect(status().isCreated());
+
+        String contentAsString = action.andReturn().getResponse().getContentAsString();
+        assertEquals("Возвращается неправильный результат при запросе POST /groups/{id}.",
+                RESULT_NEW_GROUP, contentAsString);
+    }
+
 }

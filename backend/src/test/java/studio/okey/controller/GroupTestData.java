@@ -11,8 +11,17 @@ public class GroupTestData {
                     "\"isIndividual\":false}]";
 
     public static final String RESULT_GROUP_SHORT =
-            "{\"name\":\"Группа понедельника\"" +
-                    ",\"studentCount\":2," +
+            "{\"name\":\"Группа понедельника\"," +
+                    "\"studentCount\":2," +
+                    "\"isIndividual\":true}";
+
+    public static final String NEW_GROUP =
+            "{\"name\":\"Новая группа\"," +
+                    "\"isIndividual\":true}";
+
+    public static final String RESULT_NEW_GROUP =
+            "{\"name\":\"Новая группа\"" +
+                    ",\"studentCount\":0," +
                     "\"isIndividual\":true}";
 
     public static final Long LEARNING_GROUP_INDEX = 1L;

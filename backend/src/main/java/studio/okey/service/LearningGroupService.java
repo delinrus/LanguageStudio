@@ -12,4 +12,6 @@ public interface LearningGroupService {
     void delete(long id);
 
     LearningGroup get(long id);
+
+    LearningGroup save(LearningGroup group);
 }

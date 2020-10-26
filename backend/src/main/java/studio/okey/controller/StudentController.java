@@ -33,7 +33,6 @@ public class StudentController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Student> createWithLocation(@RequestBody Student student) {
-        student.getParents().forEach(parent -> parent.setStudent(student));
         Student created = studentService.save(student);
 
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
