@@ -1,6 +1,7 @@
 package studio.okey.service;
 
 import studio.okey.model.LearningGroup;
+import studio.okey.model.Student;
 
 import java.util.List;
 
@@ -14,4 +15,6 @@ public interface LearningGroupService {
     LearningGroup get(long id);
 
     LearningGroup save(LearningGroup group);
+
+    void update(LearningGroup group, long id);
 }

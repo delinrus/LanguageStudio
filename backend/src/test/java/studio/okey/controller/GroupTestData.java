@@ -24,6 +24,15 @@ public class GroupTestData {
                     ",\"studentCount\":0," +
                     "\"isIndividual\":true}";
 
+    public static final String UPDATED_GROUP =
+            "{\"name\":\"Измененная группа\"," +
+                    "\"isIndividual\":false}";
+
+    public static final String RESULT_UPDATED_GROUP =
+            "{\"name\":\"Измененная группа\"" +
+                    ",\"studentCount\":2," +
+                    "\"isIndividual\":false}";
+
     public static final Long LEARNING_GROUP_INDEX = 1L;
 
     public static final Long GROUP_NON_EXISTING_INDEX = 1000001L;

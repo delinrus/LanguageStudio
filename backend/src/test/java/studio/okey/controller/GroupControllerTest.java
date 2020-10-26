@@ -61,7 +61,6 @@ public class GroupControllerTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.delete(REST_URL + GROUP_NON_EXISTING_INDEX))
                 .andDo(print())
                 .andExpect(status().isNotFound());
-
     }
 
     @Test
@@ -75,6 +74,33 @@ public class GroupControllerTest extends AbstractControllerTest {
         String contentAsString = action.andReturn().getResponse().getContentAsString();
         assertEquals("Возвращается неправильный результат при запросе POST /groups/{id}.",
                 RESULT_NEW_GROUP, contentAsString);
+    }
+
+    @Test
+    public void update() throws Exception {
+        perform(MockMvcRequestBuilders.put(REST_URL + LEARNING_GROUP_INDEX)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(UPDATED_GROUP))
+                .andDo(print())
+                .andExpect(status().isNoContent());
+
+
+        ResultActions action = perform(MockMvcRequestBuilders.get(REST_URL + LEARNING_GROUP_INDEX)
+                .accept(MediaType.APPLICATION_JSON_UTF8))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        String contentAsString = action.andReturn().getResponse().getContentAsString();
+        assertEquals("", RESULT_UPDATED_GROUP, contentAsString);
+    }
+
+    @Test
+    public void updateNotFound() throws Exception {
+        perform(MockMvcRequestBuilders.put(REST_URL + GROUP_NON_EXISTING_INDEX)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(UPDATED_GROUP))
+                .andDo(print())
+                .andExpect(status().isNotFound());
     }
 
 }

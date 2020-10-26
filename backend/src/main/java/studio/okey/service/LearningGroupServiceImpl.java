@@ -3,12 +3,12 @@ package studio.okey.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import studio.okey.model.LearningGroup;
-import studio.okey.model.Student;
 import studio.okey.repository.LearningGroupRepository;
+import studio.okey.util.exception.NotFoundException;
 
 import java.util.List;
 
-import static studio.okey.util.StudentUtil.generateLogin;
+import static studio.okey.util.ValidationUtil.assureIdConsistent;
 import static studio.okey.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
@@ -44,6 +44,15 @@ public class LearningGroupServiceImpl implements LearningGroupService {
     @Override
     public LearningGroup save(LearningGroup group) {
         return groupRepository.save(group);
+    }
+
+    @Override
+    public void update(LearningGroup group, long id) {
+        assureIdConsistent(group, id);
+        if (!groupRepository.existsById(id)) {
+            throw new NotFoundException("No entity to update");
+        }
+        groupRepository.save(group);
     }
 
 }

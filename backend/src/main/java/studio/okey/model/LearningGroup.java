@@ -15,11 +15,7 @@ import java.util.Set;
 @ToString
 @NoArgsConstructor
 @Table(name = "learning_group")
-public class LearningGroup {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class LearningGroup extends AbstractBaseEntity {
     private String name;
 
     private boolean isIndividual;

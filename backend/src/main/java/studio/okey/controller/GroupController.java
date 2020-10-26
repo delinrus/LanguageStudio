@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import studio.okey.model.LearningGroup;
-import studio.okey.model.Student;
 import studio.okey.service.LearningGroupService;
 import studio.okey.to.GroupTo;
 import studio.okey.util.exception.IllegalRequestDataException;
@@ -14,8 +13,7 @@ import studio.okey.util.exception.IllegalRequestDataException;
 import java.net.URI;
 import java.util.List;
 
-import static studio.okey.util.GroupUtil.createTo;
-import static studio.okey.util.GroupUtil.createTos;
+import static studio.okey.util.GroupUtil.*;
 
 @RestController
 @RequestMapping(value = GroupController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -48,16 +46,18 @@ public class GroupController {
         if (groupTo.getStudentCount() != 0) {
             throw new IllegalRequestDataException("studentCount must be 0");
         }
-        LearningGroup group = new LearningGroup();
-        group.setIndividual(groupTo.isIndividual());
-        group.setName(groupTo.getName());
-
-        LearningGroup created = groupService.save(group);
+        LearningGroup created = groupService.save(getFromTo(groupTo));
 
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
                 .buildAndExpand(created.getId()).toUri();
 
         return ResponseEntity.created(uriOfNewResource).body(createTo(created));
+    }
+
+    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void update(@RequestBody GroupTo groupTo, @PathVariable long id) {
+        groupService.update(getFromTo(groupTo), id);
     }
 }

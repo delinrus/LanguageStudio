@@ -58,8 +58,5 @@ public class StudentController {
     public void update(@RequestBody Student student, @PathVariable long id) {
         studentService.update(student, id);
     }
-
-
-
 }
 

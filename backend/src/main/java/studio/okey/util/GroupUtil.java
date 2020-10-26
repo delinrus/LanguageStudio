@@ -18,4 +18,11 @@ public class GroupUtil {
     public static List<GroupTo> createTos(List<LearningGroup> list) {
         return  list.stream().map(GroupUtil::createTo).collect(Collectors.toList());
     }
+
+    public static LearningGroup getFromTo(GroupTo groupTo) {
+        LearningGroup group = new LearningGroup();
+        group.setIndividual(groupTo.isIndividual());
+        group.setName(groupTo.getName());
+        return group;
+    }
 }
