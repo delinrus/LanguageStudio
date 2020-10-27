@@ -98,11 +98,13 @@ values (1, Null, 'Назаренко', 'Виктория', 'Сергеевна',
        (4, 2, 'Мурдашева', 'Антонина', 'Артемовна', '8-911-446-11-12', 'murdasheva.aa');
 
 insert into lesson(id, group_id, date, theme, homework, description)
-values (1, 1, '2020-06-04', 'Деепричастия', 'повтор', 'Вставить пропущенные слова');
+values (1, 1, '2020-06-04', 'Деепричастия', 'повтор', 'Вставить пропущенные слова'),
+       (2, 2, '2020-06-06', 'Прямая речь', 'диалог', 'Написать диалог, используя прямую речь');
 
 insert into lesson_data(lesson_id, student_id, attendance, homework, description)
 values (1, 2, 'NOT_EXIST', 'NOT_DONE', 'Страница 24, упр. 15'),
-       (1, 3, 'EXIST_LATE', 'DONE', 'Страница 24, упр. 15');
+       (1, 3, 'EXIST_LATE', 'DONE', 'Страница 24, упр. 15'),
+       (2, 1, 'EXIST', 'PARTIAL', 'Написать диалог');
 
 insert into parent(id, student_id, surname, name, patronymic, phone)
 values (1, 2, 'Иванов', 'Генадий', 'Васильевич', '8-363-733-12-67'),

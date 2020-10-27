@@ -1,5 +1,6 @@
 package studio.okey.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,6 +24,7 @@ public class LearningGroup extends AbstractBaseEntity {
     private Integer teacherId;
 
     @OneToMany(mappedBy = "learningGroup", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonBackReference
     private Set<Lesson> Lessons;
 
     @OneToMany(mappedBy = "learningGroupId", fetch = FetchType.EAGER)
