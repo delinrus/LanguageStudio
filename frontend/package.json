@@ -17,7 +17,7 @@
     "bootstrap-vue": "^2.15.0",
     "cross-env": "^5.2.0",
     "element-ui": "^2.9.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "nuxt": "^2.12.2",
     "nuxt-material-design-icons": "^1.0.4",
     "vuelidate": "^0.7.5"
